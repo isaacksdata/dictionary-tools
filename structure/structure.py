@@ -12,11 +12,12 @@ class DictionaryParser:
     # todo add option for comments e.g. docstrings within dictionary - might need to extend the dictionary class
     # todo check or DefaultDict, OrderedDict - other data structures
     """
-    def __init__(self):
+    def __init__(self, showExamples: bool = False):
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
         self.nTabs: int = 0
         self.tabs: str = ''
+        self.showExamples = showExamples
 
     def incrementTab(self):
         self.nTabs += 1
@@ -30,7 +31,6 @@ class DictionaryParser:
         response = f""""""
         response = self.getStructure_dict(dictionary, response)
         return response
-
 
     def getStructure_dict(self, dictionary: dict,
                           response: str,
@@ -97,6 +97,11 @@ class DictionaryParser:
             response = f"{l_type}[{', '.join(types)}] n={n}"
         else:
             response = f"{l_type}({', '.join(types)}) n={n}"
+        if self.showExamples and len(l) > 0:
+            example = l[0]
+            if isinstance(example, str):
+                example = f'{example[:10]}...' if len(example) > 10 else example
+            response = response + f' e.g. {example}'
         return response
 
     @staticmethod

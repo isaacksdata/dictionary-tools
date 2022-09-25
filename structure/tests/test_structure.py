@@ -1,4 +1,5 @@
 import unittest
+from string import ascii_lowercase
 
 from structure.structure import DictionaryParser
 
@@ -10,12 +11,19 @@ class StructureTestCase(unittest.TestCase):
         self.dictionary_with_list = {1: 'hello world',
                                      2: 0.1,
                                      3: ['abc', 'def', 1]}
+        self.dictionary_with_list_long = {1: 'hello world',
+                                     2: 0.1,
+                                     3: [ascii_lowercase, 'def', 1]}
         self.dictionary_with_tuple = {1: 'hello world',
-                                     2: 0.1,
-                                     3: ('abc', 'def', 1)}
+                                      2: 0.1,
+                                      3: ('abc', 'def', 1)}
         self.dictionary_with_tupleKey = {1: 'hello world',
-                                     2: 0.1,
-                                     ('abc', 'def', 1): 3}
+                                         2: 0.1,
+                                         ('abc', 'def', 1): 3}
+        self.dictionary_with_custom_obj = {
+            'one': 1,
+            'two': type('MyClass', (object,), {'content': {}})()
+        }
         self.nested_dictionary = {'key1': 2,
                                   'key2': {
                                       'nestedKey1': 'hello',
@@ -42,6 +50,16 @@ class StructureTestCase(unittest.TestCase):
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list[int, str] n=3\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list))
 
+    def test_getStructure_example(self):
+        self.parser.showExamples = True
+        expected = "\n{\n\tint : str\n\tint : float\n\tint : list[int, str] n=3 e.g. abc\n}\n"
+        self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list))
+
+    def test_getStructure_longExample(self):
+        self.parser.showExamples = True
+        expected = f"\n{{\n\tint : str\n\tint : float\n\tint : list[int, str] n=3 e.g. {ascii_lowercase[:10]}...\n}}\n"
+        self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list_long))
+
     def test_getStructure_tuple(self):
         expected = "\n{\n\tint : str\n\tint : float\n\tint : tuple(int, str) n=3\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_tuple))
@@ -49,6 +67,10 @@ class StructureTestCase(unittest.TestCase):
     def test_getStructure_tupleKey(self):
         expected = "\n{\n\tint : str\n\tint : float\n\ttuple(int, str) n=3 : int\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_tupleKey))
+
+    def test_getStructure_customObj(self):
+        expected = "\n{\n\tstr : int\n\tstr : MyClass\n}\n"
+        self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_custom_obj))
 
     def test_getStructure_nested(self):
         expected = "\n{\n\tstr : int\n\tstr : {\n\t\tstr : str\n\t\tstr : int\n\t}\n}\n"
