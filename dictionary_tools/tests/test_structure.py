@@ -1,7 +1,7 @@
 import unittest
 from string import ascii_lowercase
 
-from structure.structure import DictionaryParser
+from dictionary_tools.structure import DictionaryParser
 
 
 class StructureTestCase(unittest.TestCase):
