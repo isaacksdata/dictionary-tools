@@ -1,13 +1,13 @@
 """
-Print the structure of a dictionary
+Print the dictionary_tools of a dictionary
 """
 from typing import Any, List, Union, Tuple
 
 
 class DictionaryParser:
     """
-    This is a class for parsing a dictionary and returning a string of its structure which can be printed for a
-    convenient way of understanding any nested structure and the types used
+    This is a class for parsing a dictionary and returning a string of its dictionary_tools which can be printed for a
+    convenient way of understanding any nested dictionary_tools and the types used
     # todo add option to show an example of key or value
     # todo add option for comments e.g. docstrings within dictionary - might need to extend the dictionary class
     # todo check or DefaultDict, OrderedDict - other data structures
@@ -82,7 +82,7 @@ class DictionaryParser:
 
     def getStructure_list(self, l: Union[List[Any], Tuple[Any]]) -> str:
         """
-        Get the structure of a list element. The response will include a list of all the types contained within the
+        Get the dictionary_tools of a list element. The response will include a list of all the types contained within the
         list 'l' and the length of list 'l'
         :param l: the list to be investigated
         :type l: list of any type
