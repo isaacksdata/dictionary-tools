@@ -1,6 +1,7 @@
 from collections import UserDict
 
 from dictionary_tools.structure import DictionaryParser
+from dictionary_tools.data_models import d_keys, CommentedKey
 
 
 class CommentedDict(UserDict):
@@ -23,7 +24,15 @@ class CommentedDict(UserDict):
     def get_structure(self):
         return DictionaryParser().getStructure(self)
 
+    def keys(self):
+        return d_keys(self)
+
 
 if __name__ == '__main__':
+    myKey = CommentedKey(key='letter', comment='This a list of letters')
     c = CommentedDict(numbers=[1,2,3], myString='helloWorld', comment='This is my test')
+    c[myKey] = ['a', 'b']
+    c.keys()
     c.items()
+    d = dict(one=1)
+    d.keys()
