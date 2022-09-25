@@ -38,25 +38,24 @@ class DictionaryParser:
         if k is None:
             response = response + f"\n{self.tabs}{{\n"
         else:
-            response = response + f"{self.tabs}{self.gtn(k)} : {{\n"
+            response = response + f"{self.tabs}{self.gtnk(k)} : {{\n"
         self.incrementTab()
         for key, value in dictionary.items():
             if not self.is_iterable(value):
-                response = response + f"{self.tabs}{self.gtn(key)} : {self.gtn(value)}\n"
+                response = response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
             elif isinstance(value, (list, tuple)):
                 r = self.getStructure_list(value)
-                response = response + f"{self.tabs}{self.gtn(key)} : {r}\n"
+                response = response + f"{self.tabs}{self.gtnk(key)} : {r}\n"
             elif isinstance(value, dict):
                 response = self.getStructure_dict(value, response, key)
             else:
                 print(f'Unknown object of type {type(value)}')
-                response = response + f"{self.tabs}{self.gtn(key)} : {self.gtn(value)}\n"
+                response = response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
         self.decrementTab()
         response = response + f"{self.tabs}}}\n"
         return response
 
-    @staticmethod
-    def gtn(obj: Any) -> str:
+    def gtn(self, obj: Any) -> str:
         """
         gtn -> short for getTypeName
         :param obj: object to get the type of as a string
@@ -65,6 +64,21 @@ class DictionaryParser:
         :rtype: str
         """
         return type(obj).__name__
+
+    def gtnk(self, obj: Any) -> str:
+        """
+        gtn -> short for getTypeNameKey
+        This method is called when getting the type name for keys as iterable keys need to be dealt with
+        seperatley
+        :param obj: object to get the type of as a string
+        :type obj: Any
+        :return: type
+        :rtype: str
+        """
+        if isinstance(obj, tuple):
+            return self.getStructure_list(obj)
+        else:
+            return type(obj).__name__
 
     def getStructure_list(self, l: Union[List[Any], Tuple[Any]]) -> str:
         """
