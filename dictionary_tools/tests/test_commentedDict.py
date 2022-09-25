@@ -2,6 +2,7 @@ import unittest
 
 from dictionary_tools.CommentedDict import CommentedDict
 
+
 class CommentedDictTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
