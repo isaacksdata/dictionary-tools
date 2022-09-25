@@ -1,10 +1,17 @@
 """
 Print the structure of a dictionary
 """
-from typing import Any, List, Union
+from typing import Any, List, Union, Tuple
 
 
 class DictionaryParser:
+    """
+    This is a class for parsing a dictionary and returning a string of its structure which can be printed for a
+    convenient way of understanding any nested structure and the types used
+    # todo add option to show an example of key or value
+    # todo add option for comments e.g. docstrings within dictionary - might need to extend the dictionary class
+    # todo check or DefaultDict, OrderedDict - other data structures
+    """
     def __init__(self):
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
@@ -59,15 +66,36 @@ class DictionaryParser:
         """
         return type(obj).__name__
 
-    def getStructure_list(self, l: List[Any]) -> str:
+    def getStructure_list(self, l: Union[List[Any], Tuple[Any]]) -> str:
+        """
+        Get the structure of a list element. The response will include a list of all the types contained within the
+        list 'l' and the length of list 'l'
+        :param l: the list to be investigated
+        :type l: list of any type
+        :return: response
+        :rtype: str
+        """
         n = len(l)
         types = list(set([self.gtn(x) for x in l]))
         types.sort()
-        response = f"list[{', '.join(types)}] n={n}"
+        l_type = self.gtn(l)
+        if l_type == 'list':
+            response = f"{l_type}[{', '.join(types)}] n={n}"
+        else:
+            response = f"{l_type}({', '.join(types)}) n={n}"
         return response
 
     @staticmethod
     def is_iterable(obj: Any):
+        """
+        Return True if an object is iterable.
+        If true then the object has the __iter__ method or the __getitem__ method
+        Strings are iterable but for this exercise - False is returned for string types
+        :param obj: the object to check
+        :type obj: any
+        :return: True or False
+        :rtype: bool
+        """
         if isinstance(obj, str):
             return False
         try:

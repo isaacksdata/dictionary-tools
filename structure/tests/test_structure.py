@@ -10,6 +10,9 @@ class StructureTestCase(unittest.TestCase):
         self.dictionary_with_list = {1: 'hello world',
                                      2: 0.1,
                                      3: ['abc', 'def', 1]}
+        self.dictionary_with_tuple = {1: 'hello world',
+                                     2: 0.1,
+                                     3: ('abc', 'def', 1)}
         self.nested_dictionary = {'key1': 2,
                                   'key2': {
                                       'nestedKey1': 'hello',
@@ -35,6 +38,10 @@ class StructureTestCase(unittest.TestCase):
     def test_getStructure(self):
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list[int, str] n=3\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list))
+
+    def test_getStructure_tuple(self):
+        expected = "\n{\n\tint : str\n\tint : float\n\tint : tuple(int, str) n=3\n}\n"
+        self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_tuple))
 
     def test_getStructure_nested(self):
         expected = "\n{\n\tstr : int\n\tstr : {\n\t\tstr : str\n\t\tstr : int\n\t}\n}\n"
