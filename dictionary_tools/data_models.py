@@ -19,8 +19,9 @@ class CommentedValue:
 
 class d_keys:
 
-    def __init__(self, d):
+    def __init__(self, d, removeComments: bool = True):
         self.__d = d
+        self.__removeComments = removeComments
 
     def __len__(self):
         return len(self.__d)
@@ -30,7 +31,7 @@ class d_keys:
 
     def __iter__(self):
         for key in self.__d:
-            if isinstance(key, CommentedKey):
+            if isinstance(key, CommentedKey) and self.__removeComments:
                 yield key.key
             else:
                 yield key
