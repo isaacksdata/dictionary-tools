@@ -1,7 +1,14 @@
 import unittest
+import inspect
+import os
+import sys
 
-from dictionary_tools.CommentedDict import CommentedDict
-from dictionary_tools.data_models import CommentedKey, CommentedValue
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+from CommentedDict import CommentedDict
+from data_models import CommentedKey, CommentedValue
 
 # todo add some automated timing measurements
 

@@ -1,6 +1,13 @@
 from collections import UserDict
 from typing import List, Hashable, Union, Any
 import logging
+import inspect
+import os
+import sys
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 from dictionary_tools.structure import DictionaryParser
 from dictionary_tools.data_models import d_keys, CommentedKey
@@ -10,7 +17,6 @@ class CommentedDict(UserDict):
     """
     Subclass of UserDict with addtional 'comment' attribute
     The comment can be used to describe something about the dictionary
-    # todo override the getitem method so that if you have a CommentedKey it can be returned by dict[CommentedKey.name]
     """
     def __init__(self, *args, **kwargs):
         self.comment = kwargs.pop('comment', '').strip()
