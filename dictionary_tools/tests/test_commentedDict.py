@@ -2,6 +2,7 @@ import unittest
 import inspect
 import os
 import sys
+import json
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -84,3 +85,4 @@ class CommentedDictTestCase(unittest.TestCase):
         ck = CommentedKey('mykey', 'a commented key')
         self.dictionary[ck] = 100
         self.assertEqual(self.dictionary['mykey'], 100)
+

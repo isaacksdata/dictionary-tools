@@ -8,8 +8,7 @@ class DictionaryParser:
     """
     This is a class for parsing a dictionary and returning a string of its dictionary_tools which can be printed for a
     convenient way of understanding any nested dictionary_tools and the types used
-    # todo add option to show an example of key or value
-    # todo add option for comments e.g. docstrings within dictionary - might need to extend the dictionary class
+    # todo dig down into dicts when one has a iterable of dicts
     # todo check or DefaultDict, OrderedDict - other data structures
     """
     def __init__(self, showExamples: bool = False):
@@ -93,10 +92,20 @@ class DictionaryParser:
         types = list(set([self.gtn(x) for x in l]))
         types.sort()
         l_type = self.gtn(l)
-        if l_type == 'list':
-            response = f"{l_type}[{', '.join(types)}] n={n}"
+        if all([x=='dict' for x in types]):
+            r = self.getStructure_dict(l[0], '')
         else:
-            response = f"{l_type}({', '.join(types)}) n={n}"
+            r = None
+        if l_type == 'list':
+            if r is None:
+                response = f"{l_type} [{', '.join(types)}] n={n}"
+            else:
+                response = f"{l_type} [{r}{self.tabs}] n={n}"
+        else:
+            if r is None:
+                response = f"{l_type} ({', '.join(types)}) n={n}"
+            else:
+                response = f"{l_type} ({r}{self.tabs}) n={n}"
         if self.showExamples and len(l) > 0:
             example = l[0]
             if isinstance(example, str):

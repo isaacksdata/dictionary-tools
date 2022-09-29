@@ -1,5 +1,6 @@
 import unittest
 from string import ascii_lowercase
+import json
 
 from dictionary_tools.structure import DictionaryParser
 
@@ -83,6 +84,13 @@ class StructureTestCase(unittest.TestCase):
     def test_gestStructure_nested3(self):
         expected = "\n{\n\tstr : int\n\tstr : {\n\t\tstr : str\n\t\tstr : {\n\t\t\tstr : {\n\t\t\t\tstr : list[float, int, str] n=3\n\t\t\t}\n\t\t}\n\t}\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.nested_dictionary_3))
+
+    def test_hardDict(self):
+        with open('./combined-newsqa-data-v1.json', 'r') as f:
+            d = json.load(f)
+        expected = '\n{\n\tstr : str\n\tstr : list [\n\t{\n\t\tstr : str\n\t\tstr : str\n\t\tstr : list [\n\t\t{\n\t\t\tstr : float\n\t\t\tstr : {\n\t\t\t\tstr : int\n\t\t\t\tstr : int\n\t\t\t}\n\t\t\tstr : list [\n\t\t\t{\n\t\t\t\tstr : int\n\t\t\t\tstr : bool\n\t\t\t}\n\t\t\t] n=2\n\t\t\tstr : list [\n\t\t\t{\n\t\t\t\tstr : list [\n\t\t\t\t{\n\t\t\t\t\tstr : int\n\t\t\t\t\tstr : int\n\t\t\t\t}\n\t\t\t\t] n=1\n\t\t\t}\n\t\t\t] n=3\n\t\t\tstr : str\n\t\t\tstr : float\n\t\t}\n\t\t] n=9\n\t\tstr : str\n\t}\n\t] n=12744\n}\n'
+        s = self.parser.getStructure(d)
+        self.assertEqual(expected, s)
 
 
 if __name__ == '__main__':
