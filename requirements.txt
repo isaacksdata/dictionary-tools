@@ -1,3 +1,5 @@
 pydantic==1.10.2
 coverage~=6.4.4
 line_profiler~=3.5.1
+sphinx~=5.2.2
+pydata-sphinx-theme~=0.10.1

@@ -1,17 +1,22 @@
 """
 Print the dictionary_tools of a dictionary
 """
-from typing import Any, List, Union, Tuple
+from typing import Any, List, Union, Tuple, Hashable
 
 
 class DictionaryParser:
     """
     This is a class for parsing a dictionary and returning a string of its dictionary_tools which can be printed for a
     convenient way of understanding any nested dictionary_tools and the types used
-    # todo dig down into dicts when one has a iterable of dicts
+    # todo option to display actual keys
     # todo check or DefaultDict, OrderedDict - other data structures
     """
     def __init__(self, showExamples: bool = False):
+        """
+        Init the Dictionary parser class
+        :param showExamples: Should examples of iterables be included in the summary output
+        :type showExamples: bool
+        """
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
         self.nTabs: int = 0
@@ -19,21 +24,56 @@ class DictionaryParser:
         self.showExamples = showExamples
 
     def incrementTab(self):
+        """
+        Increase the number of tabs by 1.
+        E.g. '\t' -> '\t\t'
+        :return: void
+        :rtype: void
+        """
         self.nTabs += 1
         self.tabs = ''.join(['\t'] * self.nTabs)
 
     def decrementTab(self):
+        """
+        Decrease the number of tabs by 1
+        E.g. '\t\t' -> '\t'
+        :return: void
+        :rtype: void
+        """
         self.nTabs -= 1
         self.tabs = ''.join(['\t'] * self.nTabs)
 
     def getStructure(self, dictionary: dict) -> str:
+        """
+        Initialise the response string and start the structure analysis of the dictionary
+        :param dictionary: the dictionary object to parse
+        :type dictionary: dict
+        :return: response
+        :rtype: str
+        """
         response = f""""""
         response = self.getStructure_dict(dictionary, response)
         return response
 
     def getStructure_dict(self, dictionary: dict,
                           response: str,
-                          k: str = None) -> str:
+                          k: Hashable = None) -> str:
+        """
+        Summarise the structure of a dictionary
+
+        Iterate over the key : value pairs. If the value is not iterable (excluding strings) then the response is
+        appended with the key and value type. If the value is iterable (list, tuple, ...) then the iterable itself is
+        unpacked and described. If the value is another dictionary then the function becomes recursive as this function
+        is called again on the sub-dictionary.
+        :param dictionary: The dictionary to unpack and describe
+        :type dictionary: dict
+        :param response: the response string so far
+        :type response: str
+        :param k: if the input dictionary is a value, then k is the key
+        :type k: hashable object
+        :return: the updated response
+        :rtype: str
+        """
         if k is None:
             response = response + f"\n{self.tabs}{{\n"
         else:
