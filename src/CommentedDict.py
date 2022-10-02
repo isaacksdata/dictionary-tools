@@ -9,8 +9,8 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from dictionary_tools.structure import DictionaryParser
-from dictionary_tools.data_models import d_keys, CommentedKey
+from src.structure import DictionaryParser
+from src.data_models import d_keys, CommentedKey
 
 
 class CommentedDict(UserDict):

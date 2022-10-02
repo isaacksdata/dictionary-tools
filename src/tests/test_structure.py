@@ -2,7 +2,7 @@ import unittest
 from string import ascii_lowercase
 import json
 
-from dictionary_tools.structure import DictionaryParser
+from src.structure import DictionaryParser
 
 
 class StructureTestCase(unittest.TestCase):
