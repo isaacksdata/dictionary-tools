@@ -1,0 +1,6 @@
+﻿dictionary\_tools.structure.test\_function
+==========================================
+
+.. currentmodule:: dictionary_tools.structure
+
+.. autofunction:: test_function
