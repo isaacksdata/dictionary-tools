@@ -1,7 +1,9 @@
 """
 Other commented data models used for keys and values
 """
-from typing import Any, Union, Hashable
+
+from typing import Any, Hashable, Union
+
 from pydantic.dataclasses import dataclass as pyd_dataclass
 
 
@@ -17,6 +19,7 @@ class CommentedKey:
         comment (str): A comment describing the purpose of the key
 
     """
+
     key: Hashable
     comment: Union[str, None] = None
 
@@ -33,6 +36,7 @@ class CommentedValue:
         comment (str): A comment describing the purpose of the value
 
     """
+
     value: Any
     comment: Union[str, None] = None
 

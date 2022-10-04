@@ -1,7 +1,7 @@
 """
 Print the src of a dictionary
 """
-from typing import Any, List, Union, Tuple, Hashable
+from typing import Any, Hashable, List, Tuple, Union
 
 
 class DictionaryParser:
@@ -11,6 +11,7 @@ class DictionaryParser:
     # todo option to display actual keys
     # todo check or DefaultDict, OrderedDict - other data structures
     """
+
     def __init__(self, showExamples: bool = False):
         """
         Init the Dictionary parser class
@@ -20,10 +21,10 @@ class DictionaryParser:
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
         self.nTabs: int = 0
-        self.tabs: str = ''
+        self.tabs: str = ""
         self.showExamples = showExamples
 
-    def incrementTab(self):
+    def incrementTab(self) -> None:
         """
         Increase the number of tabs by 1.
         E.g. '\t' -> '\t\t'
@@ -31,9 +32,9 @@ class DictionaryParser:
         :rtype: void
         """
         self.nTabs += 1
-        self.tabs = ''.join(['\t'] * self.nTabs)
+        self.tabs = "".join(["\t"] * self.nTabs)
 
-    def decrementTab(self):
+    def decrementTab(self) -> None:
         """
         Decrease the number of tabs by 1
         E.g. '\t\t' -> '\t'
@@ -41,7 +42,7 @@ class DictionaryParser:
         :rtype: void
         """
         self.nTabs -= 1
-        self.tabs = ''.join(['\t'] * self.nTabs)
+        self.tabs = "".join(["\t"] * self.nTabs)
 
     def getStructure(self, dictionary: dict) -> str:
         """
@@ -51,13 +52,13 @@ class DictionaryParser:
         :return: response
         :rtype: str
         """
-        response = f""""""
+        response = """"""
         response = self.getStructure_dict(dictionary, response)
         return response
 
-    def getStructure_dict(self, dictionary: dict,
-                          response: str,
-                          k: Hashable = None) -> str:
+    def getStructure_dict(
+        self, dictionary: dict, response: str, k: Hashable = None
+    ) -> str:
         """
         Summarise the structure of a dictionary
 
@@ -81,15 +82,19 @@ class DictionaryParser:
         self.incrementTab()
         for key, value in dictionary.items():
             if not self.is_iterable(value):
-                response = response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                response = (
+                    response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                )
             elif isinstance(value, (list, tuple)):
                 r = self.getStructure_list(value)
                 response = response + f"{self.tabs}{self.gtnk(key)} : {r}\n"
             elif isinstance(value, dict):
                 response = self.getStructure_dict(value, response, key)
             else:
-                print(f'Unknown object of type {type(value)}')
-                response = response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                print(f"Unknown object of type {type(value)}")
+                response = (
+                    response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                )
         self.decrementTab()
         response = response + f"{self.tabs}}}\n"
         return response
@@ -119,24 +124,24 @@ class DictionaryParser:
         else:
             return type(obj).__name__
 
-    def getStructure_list(self, l: Union[List[Any], Tuple[Any]]) -> str:
+    def getStructure_list(self, my_list: Union[List[Any], Tuple[Any, ...]]) -> str:
         """
         Get the src of a list element. The response will include a list of all the types contained within the
         list 'l' and the length of list 'l'
-        :param l: the list to be investigated
-        :type l: list of any type
+        :param my_list: the list to be investigated
+        :type my_list: list of any type
         :return: response
         :rtype: str
         """
-        n = len(l)
-        types = list(set([self.gtn(x) for x in l]))
+        n = len(my_list)
+        types = list(set([self.gtn(x) for x in my_list]))
         types.sort()
-        l_type = self.gtn(l)
-        if all([x=='dict' for x in types]):
-            r = self.getStructure_dict(l[0], '')
+        l_type = self.gtn(my_list)
+        if all([x == "dict" for x in types]):
+            r = self.getStructure_dict(my_list[0], "")
         else:
             r = None
-        if l_type == 'list':
+        if l_type == "list":
             if r is None:
                 response = f"{l_type} [{', '.join(types)}] n={n}"
             else:
@@ -146,15 +151,15 @@ class DictionaryParser:
                 response = f"{l_type} ({', '.join(types)}) n={n}"
             else:
                 response = f"{l_type} ({r}{self.tabs}) n={n}"
-        if self.showExamples and len(l) > 0:
-            example = l[0]
+        if self.showExamples and len(my_list) > 0:
+            example = my_list[0]
             if isinstance(example, str):
-                example = f'{example[:10]}...' if len(example) > 10 else example
-            response = response + f' e.g. {example}'
+                example = f"{example[:10]}..." if len(example) > 10 else example
+            response = response + f" e.g. {example}"
         return response
 
     @staticmethod
-    def is_iterable(obj: Any):
+    def is_iterable(obj: Any) -> bool:
         """
         Return True if an object is iterable.
         If true then the object has the __iter__ method or the __getitem__ method
@@ -172,5 +177,3 @@ class DictionaryParser:
             return False
         else:
             return True
-
-

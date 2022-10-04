@@ -1,16 +1,16 @@
-from collections import UserDict
-from typing import List, Hashable, Union, Any
-import logging
 import inspect
+import logging
 import os
 import sys
+from collections import UserDict
+from typing import Hashable, KeysView, List, Union
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
+from src.data_models import CommentedKey, d_keys
 from src.structure import DictionaryParser
-from src.data_models import d_keys, CommentedKey
 
 
 class CommentedDict(UserDict):
@@ -29,7 +29,8 @@ class CommentedDict(UserDict):
 
     print(d)
     # This is my test
-    {'numbers': [1, 2, 3], 'myString': 'helloWorld', CommentedKey(key='letter', comment='This a list of letters'): ['a', 'b']}
+    {'numbers': [1, 2, 3], 'myString': 'helloWorld', CommentedKey(key='letter',
+    comment='This a list of letters'): ['a', 'b']}
 
     The list of letters "['a', 'b']" could be returned with "d['letter']"
 
@@ -40,7 +41,8 @@ class CommentedDict(UserDict):
 
     print(d)
     # This is my test
-    {'numbers': [1, 2, 3], 'myString': 'helloWorld', CommentedKey(key='letter', comment='This a list of letters'): ['a', 'b']}
+    {'numbers': [1, 2, 3], 'myString': 'helloWorld', CommentedKey(key='letter',
+    comment='This a list of letters'): ['a', 'b']}
 
     Then d['letter'] = ['c', 'd']
 
@@ -50,14 +52,15 @@ class CommentedDict(UserDict):
     {'numbers': [1, 2, 3], 'myString': 'helloWorld', 'letter': ['c', 'd']}
 
     """
+
     def __init__(self, *args, **kwargs):
-        self.comment = kwargs.pop('comment', '').strip()
+        self.comment = kwargs.pop("comment", "").strip()
         super().__init__(*args, **kwargs)
 
     def __repr__(self):
         dict_repr = super().__repr__()
-        comments = [f'# {line}' for line in self.comment.splitlines()]
-        return '\n'.join(comments + [dict_repr])
+        comments = [f"# {line}" for line in self.comment.splitlines()]
+        return "\n".join(comments + [dict_repr])
 
     def __getitem__(self, key):
         """
@@ -85,7 +88,9 @@ class CommentedDict(UserDict):
         if isinstance(key, CommentedKey):
             v = self.data.get(key.key, None)
             if v is not None:
-                logging.warning(f'Popping {key.key} and replacing with CommentedKey with key {key}')
+                logging.warning(
+                    f"Popping {key.key} and replacing with CommentedKey with key {key}"
+                )
                 _ = self.data.pop(key.key)
             else:
                 ck = self.__checkCommentedKeys(key.key)
@@ -95,13 +100,15 @@ class CommentedDict(UserDict):
             # check if any of the CommentedKeys have key attribute equal to key
             ck = self.__checkCommentedKeys(key)
             if ck is not None:
-                logging.warning(f'CommentedKey with key = {key} will be replaced with {key}')
+                logging.warning(
+                    f"CommentedKey with key = {key} will be replaced with {key}"
+                )
                 _ = self.data.pop(ck)
         else:
             pass
         self.data[key] = value
 
-    def __checkCommentedKeys(self, key: Hashable) -> Union[type(None), CommentedKey]:
+    def __checkCommentedKeys(self, key: Hashable) -> Union[type[None], CommentedKey]:
         """
         Check to see if there is a CommentedKey in the dictionary whereby the key attribute equals the input key
         :param key: input key
@@ -115,9 +122,11 @@ class CommentedDict(UserDict):
         elif len(match) == 1:
             return match[0]
         else:
-            raise ValueError('Cannot have two CommentedKeys with the same key in the same dictionary!')
+            raise ValueError(
+                "Cannot have two CommentedKeys with the same key in the same dictionary!"
+            )
 
-    def set_comment(self, comment: str):
+    def set_comment(self, comment: str) -> None:
         """
         Set the comment of the dictionary
         :param comment: the comment
@@ -127,7 +136,7 @@ class CommentedDict(UserDict):
         """
         self.comment = comment.strip()
 
-    def get_structure(self):
+    def get_structure(self) -> str:
         """
         Get the structure of the dictionary as a summary string
 
@@ -199,12 +208,17 @@ class CommentedDict(UserDict):
         :return: commented keys
         :rtype: list of commented keys
         """
-        return [x for x in d_keys(self, removeComments=False) if isinstance(x, CommentedKey)]
+        return [
+            x for x in d_keys(self, removeComments=False) if isinstance(x, CommentedKey)
+        ]
 
-if __name__ == '__main__':
-    myKey = CommentedKey(key='letter', comment='This a list of letters')
-    c = CommentedDict(numbers=[1,2,3], myString='helloWorld', comment='This is my test')
-    c[myKey] = ['a', 'b']
+
+if __name__ == "__main__":
+    myKey = CommentedKey(key="letter", comment="This a list of letters")
+    c = CommentedDict(
+        numbers=[1, 2, 3], myString="helloWorld", comment="This is my test"
+    )
+    c[myKey] = ["a", "b"]
     c.keys()
     c.items()
     d = dict(one=1)

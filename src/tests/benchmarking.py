@@ -1,6 +1,7 @@
 import inspect
 import os
 import sys
+
 from line_profiler import LineProfiler
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -8,63 +9,65 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 from CommentedDict import CommentedDict
-from data_models import CommentedKey, CommentedValue
+from data_models import CommentedKey
 
 basic_dict = {}
-basic_dict['mykey'] = 10
+basic_dict["mykey"] = 10
 commentedDict = CommentedDict()
-commentedDict['mykey'] = 10
-commentedKey = CommentedKey(key='myCommentedKey', comment="Test commented Key")
-anotherCommentedKey = CommentedKey(key='AnotherCommentedKey', comment="Test commented Key")
+commentedDict["mykey"] = 10
+commentedKey = CommentedKey(key="myCommentedKey", comment="Test commented Key")
+anotherCommentedKey = CommentedKey(
+    key="AnotherCommentedKey", comment="Test commented Key"
+)
 commentedDict_withCommentedKey = CommentedDict()
 commentedDict_withCommentedKey[commentedKey] = 20
 
 
-def basic_set():
+def basic_set() -> None:
     basic_dict[1] = 2
 
 
-def commented_set():
+def commented_set() -> None:
     commentedDict[1] = 2
 
 
-def basic_replace():
-    basic_dict['mykey'] = 20
+def basic_replace() -> None:
+    basic_dict["mykey"] = 20
 
 
-def commented_replace():
-    commentedDict['mykey'] = 20
+def commented_replace() -> None:
+    commentedDict["mykey"] = 20
 
 
-def basic_get():
-    _ = basic_dict['mykey']
+def basic_get() -> None:
+    _ = basic_dict["mykey"]
 
 
-def commented_get():
-    _ = commentedDict['mykey']
+def commented_get() -> None:
+    _ = commentedDict["mykey"]
 
 
-def set_commentedKey():
+def set_commentedKey() -> None:
     commentedDict[commentedKey] = 10
 
 
-def replace_commentedKey_basic():
-    commentedDict_withCommentedKey['myCommentedKey'] = 20
+def replace_commentedKey_basic() -> None:
+    commentedDict_withCommentedKey["myCommentedKey"] = 20
 
 
-def replace_commentedKey_with_commentedKey():
+def replace_commentedKey_with_commentedKey() -> None:
     commentedDict_withCommentedKey[commentedKey] = 100
 
 
-def get_commentedKey():
+def get_commentedKey() -> None:
     _ = commentedDict_withCommentedKey[commentedKey]
 
 
-def get_commentedKey_with_str():
-    _ = commentedDict_withCommentedKey['myCommentedKey']
+def get_commentedKey_with_str() -> None:
+    _ = commentedDict_withCommentedKey["myCommentedKey"]
 
 
-def main():
+def main() -> None:
     basic_set()
     commented_set()
     basic_replace()
@@ -78,7 +81,7 @@ def main():
     get_commentedKey_with_str()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lprofiler = LineProfiler()
 
     lprofiler.add_function(basic_set)
