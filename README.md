@@ -1,5 +1,7 @@
 # Dictionary Tools  
 
+Documentation -> https://isaacksdata.github.io/dictionary-tools/
+
 ## Dictionary Structure  
 
 This repo includes tools for understanding the structure of a dictionary data structure.   
