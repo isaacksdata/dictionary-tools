@@ -29,6 +29,9 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 
 [tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
 # 3rd party import
 ignore_missing_imports = true
 # dynamic typing
