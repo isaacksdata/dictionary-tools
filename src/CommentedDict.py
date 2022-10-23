@@ -1,6 +1,6 @@
 import logging
 from collections import UserDict
-from typing import Hashable, List, Any, Optional, Tuple, Iterable
+from typing import Any, Hashable, Iterable, List, Optional, Tuple
 
 from src.data_models import CommentedKey, d_keys
 from src.structure import DictionaryParser

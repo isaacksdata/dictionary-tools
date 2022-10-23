@@ -2,7 +2,7 @@
 Other commented data models used for keys and values
 """
 
-from typing import Any, Hashable, Union, Mapping, Generator
+from typing import Any, Generator, Hashable, Mapping, Union
 
 from pydantic.dataclasses import dataclass as pyd_dataclass
 

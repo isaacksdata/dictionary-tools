@@ -1,7 +1,7 @@
 """
 Print the src of a dictionary
 """
-from typing import Any, Hashable, List, Tuple, Union, Mapping
+from typing import Any, Hashable, List, Mapping, Tuple, Union
 
 
 class DictionaryParser:

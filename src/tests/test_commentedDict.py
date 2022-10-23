@@ -1,7 +1,7 @@
 import unittest
 
-from src.data_models import CommentedKey
 from src.CommentedDict import CommentedDict
+from src.data_models import CommentedKey
 
 # todo add some automated timing measurements
 
