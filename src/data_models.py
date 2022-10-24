@@ -2,7 +2,7 @@
 Other commented data models used for keys and values
 """
 
-from typing import Any, Hashable, Union
+from typing import Any, Generator, Hashable, Mapping, Union
 
 from pydantic.dataclasses import dataclass as pyd_dataclass
 
@@ -46,7 +46,7 @@ class d_keys:
     A class used for extracting dictionary keys from CommentedDict
     """
 
-    def __init__(self, d, removeComments: bool = True):
+    def __init__(self, d: Mapping, removeComments: bool = True):
         """
         Init the class with the dictionary
         :param d: the dictionary to get the keys from
@@ -57,13 +57,13 @@ class d_keys:
         self.__d = d
         self.__removeComments = removeComments
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__d)
 
-    def __contains__(self, key):
+    def __contains__(self, key: Hashable) -> bool:
         return key in self.__d
 
-    def __iter__(self):
+    def __iter__(self) -> Generator:
         for key in self.__d:
             if isinstance(key, CommentedKey) and self.__removeComments:
                 yield key.key

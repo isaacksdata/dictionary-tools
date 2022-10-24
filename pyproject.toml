@@ -20,6 +20,7 @@ isort = "^5.10.1"
 black = "^22.8.0"
 flake8 = "^5.0.4"
 mypy = "^0.982"
+pydantic = "^1.10.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -29,6 +30,9 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 
 [tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
 # 3rd party import
 ignore_missing_imports = true
 # dynamic typing

@@ -1,0 +1,35 @@
+# based on https://johschmidt42.medium.com/setting-up-python-projects-part-ii-c4bd84b709d1
+
+name: Linting
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  Linting:
+    runs-on: ubuntu-latest
+    steps:
+      # check-out repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      # install poetry
+      - name: Install poetry
+        run: pipx install poetry==1.2.0
+      # set-up python with cache
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'poetry'
+      # install requirements (including dev dependencies)
+      - name: Install requirements
+        run: poetry install --only lint --no-root
+      # run linters
+      - name: Run linters
+        run: |
+          set -o pipefail
+          poetry run make lint

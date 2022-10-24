@@ -1,7 +1,7 @@
 """
 Print the src of a dictionary
 """
-from typing import Any, Hashable, List, Tuple, Union
+from typing import Any, Hashable, List, Mapping, Tuple, Union
 
 
 class DictionaryParser:
@@ -44,7 +44,7 @@ class DictionaryParser:
         self.nTabs -= 1
         self.tabs = "".join(["\t"] * self.nTabs)
 
-    def getStructure(self, dictionary: dict) -> str:
+    def getStructure(self, dictionary: Mapping) -> str:
         """
         Initialise the response string and start the structure analysis of the dictionary
         :param dictionary: the dictionary object to parse
@@ -57,7 +57,7 @@ class DictionaryParser:
         return response
 
     def getStructure_dict(
-        self, dictionary: dict, response: str, k: Hashable = None
+        self, dictionary: Mapping, response: str, k: Hashable = None
     ) -> str:
         """
         Summarise the structure of a dictionary

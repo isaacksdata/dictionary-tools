@@ -1,19 +1,12 @@
-import inspect
-import os
-import sys
+from typing import Union
 
 from line_profiler import LineProfiler
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
+from src.CommentedDict import CommentedDict
+from src.data_models import CommentedKey
 
-from CommentedDict import CommentedDict
-from data_models import CommentedKey
-
-basic_dict = {}
-basic_dict["mykey"] = 10
-commentedDict = CommentedDict()
+basic_dict: dict[Union[int, str, CommentedKey], Union[int, str]] = {"mykey": 10}
+commentedDict: CommentedDict = CommentedDict()
 commentedDict["mykey"] = 10
 commentedKey = CommentedKey(key="myCommentedKey", comment="Test commented Key")
 anotherCommentedKey = CommentedKey(

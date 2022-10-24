@@ -1,13 +1,6 @@
-import inspect
 import logging
-import os
-import sys
 from collections import UserDict
-from typing import Hashable, KeysView, List, Union
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
+from typing import Any, Hashable, Iterable, List, Optional, Tuple
 
 from src.data_models import CommentedKey, d_keys
 from src.structure import DictionaryParser
@@ -53,28 +46,26 @@ class CommentedDict(UserDict):
 
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Iterable[Tuple[str, Any]], **kwargs: Any):
         self.comment = kwargs.pop("comment", "").strip()
         super().__init__(*args, **kwargs)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         dict_repr = super().__repr__()
         comments = [f"# {line}" for line in self.comment.splitlines()]
         return "\n".join(comments + [dict_repr])
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: Hashable) -> Any:
         """
         Overriding the getitem method
 
-        :param key:
-        :type key:
-        :return:
-        :rtype:
+        :param key: the key to return the value for
+        :type key: Hashable
+        :return: the associated value
+        :rtype: Any
         """
         if key in self.data:
             return self.data[key]
-        if hasattr(self.__class__, "__missing__"):
-            return self.__class__.__missing__(self, key)
         if isinstance(key, CommentedKey):
             commentedKey = self.__checkCommentedKeys(key.key)
         else:
@@ -83,7 +74,7 @@ class CommentedDict(UserDict):
             return self.data[commentedKey]
         raise KeyError(key)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: Hashable, value: Any) -> None:
         # check for any CommentedKeys in the dictionary
         if isinstance(key, CommentedKey):
             v = self.data.get(key.key, None)
@@ -108,7 +99,7 @@ class CommentedDict(UserDict):
             pass
         self.data[key] = value
 
-    def __checkCommentedKeys(self, key: Hashable) -> Union[type[None], CommentedKey]:
+    def __checkCommentedKeys(self, key: Hashable) -> Optional[CommentedKey]:
         """
         Check to see if there is a CommentedKey in the dictionary whereby the key attribute equals the input key
         :param key: input key
@@ -165,7 +156,7 @@ class CommentedDict(UserDict):
             return types
 
     @staticmethod
-    def __simpleType(obj) -> type:
+    def __simpleType(obj: object) -> type:
         """
         Return the type of an object
         :param obj: the object to get the type of
@@ -176,7 +167,7 @@ class CommentedDict(UserDict):
         return type(obj)
 
     @staticmethod
-    def __prettyType(obj) -> str:
+    def __prettyType(obj: object) -> str:
         """
         Return the type of an object as a string
         :param obj: object to get the type of
@@ -186,7 +177,7 @@ class CommentedDict(UserDict):
         """
         return type(obj).__name__
 
-    def keys(self) -> d_keys:
+    def keys(self) -> d_keys:  # type: ignore[override]
         """
         Return the keys of the dictionary
         :return: the keys
@@ -211,15 +202,3 @@ class CommentedDict(UserDict):
         return [
             x for x in d_keys(self, removeComments=False) if isinstance(x, CommentedKey)
         ]
-
-
-if __name__ == "__main__":
-    myKey = CommentedKey(key="letter", comment="This a list of letters")
-    c = CommentedDict(
-        numbers=[1, 2, 3], myString="helloWorld", comment="This is my test"
-    )
-    c[myKey] = ["a", "b"]
-    c.keys()
-    c.items()
-    d = dict(one=1)
-    d.keys()
