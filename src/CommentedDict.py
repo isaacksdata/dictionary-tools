@@ -4,6 +4,7 @@ from typing import Any, Hashable, Iterable, List, Optional, Tuple
 
 from src.data_models import CommentedKey, d_keys
 from src.structure import DictionaryParser
+from src.utils import prettyType, simpleType
 
 
 class CommentedDict(UserDict):
@@ -148,34 +149,12 @@ class CommentedDict(UserDict):
         :return: list of types
         :rtype: list of Hashables
         """
-        fun = self.__prettyType if pretty else self.__simpleType
+        fun = prettyType if pretty else simpleType
         types = [fun(x) for x in d_keys(self, removeComments=False)]
         if unique:
             return list(set(types))
         else:
             return types
-
-    @staticmethod
-    def __simpleType(obj: object) -> type:
-        """
-        Return the type of an object
-        :param obj: the object to get the type of
-        :type obj: Any
-        :return: the type of the object
-        :rtype: type
-        """
-        return type(obj)
-
-    @staticmethod
-    def __prettyType(obj: object) -> str:
-        """
-        Return the type of an object as a string
-        :param obj: object to get the type of
-        :type obj: Any
-        :return: the type of the object
-        :rtype: str
-        """
-        return type(obj).__name__
 
     def keys(self) -> d_keys:  # type: ignore[override]
         """

@@ -2,6 +2,7 @@
 Print the src of a dictionary
 """
 from typing import Any, Hashable, List, Mapping, Tuple, Union
+from collections import defaultdict
 
 
 class DictionaryParser:
@@ -48,12 +49,28 @@ class DictionaryParser:
         """
         Initialise the response string and start the structure analysis of the dictionary
         :param dictionary: the dictionary object to parse
-        :type dictionary: dict
+        :type dictionary: Mapping
         :return: response
         :rtype: str
         """
         response = """"""
+        response = self.check_default_dict(dictionary=dictionary, response=response)
         response = self.getStructure_dict(dictionary, response)
+        return response
+
+    def check_default_dict(self, dictionary: Mapping, response: str) -> str:
+        """
+        Check if the dictionary is a default dict and if so add a statement to describe the default element
+
+        :param dictionary: the input dictionary
+        :type dictionary: Mapping
+        :param response: the response string so far
+        :type response: str
+        :return: response
+        :rtype: str
+        """
+        if isinstance(dictionary, defaultdict):
+            response = response + f"\nDefault = {dictionary.default_factory.__name__}"
         return response
 
     def getStructure_dict(
