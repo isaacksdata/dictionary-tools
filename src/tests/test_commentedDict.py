@@ -3,8 +3,6 @@ import unittest
 from src.CommentedDict import CommentedDict
 from src.data_models import CommentedKey
 
-# todo add some automated timing measurements
-
 
 class CommentedDictTestCase(unittest.TestCase):
     def setUp(self) -> None:

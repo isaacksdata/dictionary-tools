@@ -10,7 +10,7 @@ class DictionaryParser:
     This is a class for parsing a dictionary and returning a string of its src which can be printed for a
     convenient way of understanding any nested src and the types used
     # todo option to display actual keys
-    # todo check or DefaultDict, OrderedDict - other data structures
+    # todo check or OrderedDict - other data structures
     """
 
     def __init__(self, showExamples: bool = False):
