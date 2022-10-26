@@ -1,7 +1,7 @@
 import json
 import unittest
 from string import ascii_lowercase
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 
 from src.structure import DictionaryParser
@@ -118,6 +118,16 @@ class StructureTestCase(unittest.TestCase):
             d[k].append(v)
         s = self.parser.getStructure(d)
         expected = '\nDefault = list\n{\n\tstr : list [int] n=2\n\tstr : list [int] n=2\n\tstr : list [int] n=1\n}\n'
+        self.assertEqual(s, expected)
+
+    def test_ordereddict(self) -> None:
+        d = OrderedDict()
+        keys = ['a', 'b', 'c', 'd', 'e', 'f']
+        values = [1, 0.1, 'third element', [1, 2, 3], (1, 2, 3), dict(key='value')]
+        for k, v in zip(keys, values):
+            d[k] = v
+        s = self.parser.getStructure(d)
+        expected = '\nOrderedDict\n{\n\t1-> str : int\n\t2-> str : float\n\t3-> str : str\n\t4-> str : list [int] n=3\n\t5-> str : tuple (int) n=3\n\t6-> str : {\n\t\t1-> str : str\n\t}\n}\n'
         self.assertEqual(s, expected)
 
 

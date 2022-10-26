@@ -2,7 +2,7 @@
 Print the src of a dictionary
 """
 from typing import Any, Hashable, List, Mapping, Tuple, Union
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 
 class DictionaryParser:
@@ -24,6 +24,7 @@ class DictionaryParser:
         self.nTabs: int = 0
         self.tabs: str = ""
         self.showExamples = showExamples
+        self.is_ordered = False
 
     def incrementTab(self) -> None:
         """
@@ -55,7 +56,25 @@ class DictionaryParser:
         """
         response = """"""
         response = self.check_default_dict(dictionary=dictionary, response=response)
+        response = self.check_ordered_dict(dictionary=dictionary, response=response)
         response = self.getStructure_dict(dictionary, response)
+        return response
+
+    def check_ordered_dict(self, dictionary: Mapping, response: str) -> str:
+        """
+        Check if the dictionary is an ordered dict and if so add a statement to say so
+
+        If ordered dict, then set self.is_ordered to True
+        :param dictionary: the input dictionary
+        :type dictionary: Mapping
+        :param response: the response string so far
+        :type response: str
+        :return: response
+        :rtype: str
+        """
+        if isinstance(dictionary, OrderedDict):
+            response = response + "\nOrderedDict"
+            self.is_ordered = True
         return response
 
     def check_default_dict(self, dictionary: Mapping, response: str) -> str:
@@ -74,7 +93,7 @@ class DictionaryParser:
         return response
 
     def getStructure_dict(
-        self, dictionary: Mapping, response: str, k: Hashable = None
+        self, dictionary: Mapping, response: str, k: Hashable = None, idx: str = None
     ) -> str:
         """
         Summarise the structure of a dictionary
@@ -89,28 +108,31 @@ class DictionaryParser:
         :type response: str
         :param k: if the input dictionary is a value, then k is the key
         :type k: hashable object
+        :param idx: index of the key if the value is a dictionary
+        :type idx: str
         :return: the updated response
         :rtype: str
         """
         if k is None:
             response = response + f"\n{self.tabs}{{\n"
         else:
-            response = response + f"{self.tabs}{self.gtnk(k)} : {{\n"
+            response = response + f"{self.tabs}{idx}{self.gtnk(k)} : {{\n"
         self.incrementTab()
-        for key, value in dictionary.items():
+        for i, (key, value) in enumerate(dictionary.items()):
+            idx = f"{i+1}-> " if self.is_ordered else ""
             if not self.is_iterable(value):
                 response = (
-                    response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                    response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
                 )
             elif isinstance(value, (list, tuple)):
                 r = self.getStructure_list(value)
-                response = response + f"{self.tabs}{self.gtnk(key)} : {r}\n"
+                response = response + f"{self.tabs}{idx}{self.gtnk(key)} : {r}\n"
             elif isinstance(value, dict):
-                response = self.getStructure_dict(value, response, key)
+                response = self.getStructure_dict(value, response, key, idx)
             else:
                 print(f"Unknown object of type {type(value)}")
                 response = (
-                    response + f"{self.tabs}{self.gtnk(key)} : {self.gtn(value)}\n"
+                    response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
                 )
         self.decrementTab()
         response = response + f"{self.tabs}}}\n"
