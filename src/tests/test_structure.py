@@ -1,6 +1,8 @@
 import json
 import unittest
 from string import ascii_lowercase
+from collections import defaultdict
+
 
 from src.structure import DictionaryParser
 
@@ -99,6 +101,24 @@ class StructureTestCase(unittest.TestCase):
         )
         s = self.parser.getStructure(d)
         self.assertEqual(expected, s)
+
+    def test_defaultdict(self) -> None:
+        # ----- testing default int --------
+        d = defaultdict(int)
+        d[1] = 1
+        s = self.parser.getStructure(d)
+        expected = '\nDefault = int\n{\n\tint : int\n}\n'
+        self.assertEqual(s, expected)
+
+        # testing default list
+        d = defaultdict(list)
+        keys = ['a', 'a', 'b', 'b', 'c']
+        values = [1, 2, 3, 4, 5]
+        for k, v in zip(keys, values):
+            d[k].append(v)
+        s = self.parser.getStructure(d)
+        expected = '\nDefault = list\n{\n\tstr : list [int] n=2\n\tstr : list [int] n=2\n\tstr : list [int] n=1\n}\n'
+        self.assertEqual(s, expected)
 
 
 if __name__ == "__main__":
