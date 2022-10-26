@@ -1,8 +1,8 @@
 """
 Print the src of a dictionary
 """
+from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
-from collections import defaultdict, OrderedDict
 
 
 class DictionaryParser:
@@ -88,11 +88,15 @@ class DictionaryParser:
         :rtype: str
         """
         if isinstance(dictionary, defaultdict):
-            response = response + f"\nDefault = {dictionary.default_factory.__name__}"
+            default = dictionary.default_factory
+            if default is not None:
+                response = response + f"\nDefault = {default.__name__}"
+            else:
+                response = response + "\nDefault = Not specified"
         return response
 
     def getStructure_dict(
-        self, dictionary: Mapping, response: str, k: Hashable = None, idx: str = None
+        self, dictionary: Mapping, response: str, k: Hashable = None, idx: str = ""
     ) -> str:
         """
         Summarise the structure of a dictionary

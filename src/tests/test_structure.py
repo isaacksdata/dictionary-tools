@@ -1,8 +1,7 @@
 import json
 import unittest
+from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
-from collections import defaultdict, OrderedDict
-
 
 from src.structure import DictionaryParser
 
@@ -107,27 +106,30 @@ class StructureTestCase(unittest.TestCase):
         d = defaultdict(int)
         d[1] = 1
         s = self.parser.getStructure(d)
-        expected = '\nDefault = int\n{\n\tint : int\n}\n'
+        expected = "\nDefault = int\n{\n\tint : int\n}\n"
         self.assertEqual(s, expected)
 
         # testing default list
-        d = defaultdict(list)
-        keys = ['a', 'a', 'b', 'b', 'c']
+        d2: defaultdict = defaultdict(list)
+        keys = ["a", "a", "b", "b", "c"]
         values = [1, 2, 3, 4, 5]
         for k, v in zip(keys, values):
-            d[k].append(v)
-        s = self.parser.getStructure(d)
-        expected = '\nDefault = list\n{\n\tstr : list [int] n=2\n\tstr : list [int] n=2\n\tstr : list [int] n=1\n}\n'
+            d2[k].append(v)
+        s = self.parser.getStructure(d2)
+        expected = "\nDefault = list\n{\n\tstr : list [int] n=2\n\tstr : list [int] n=2\n\tstr : list [int] n=1\n}\n"
         self.assertEqual(s, expected)
 
     def test_ordereddict(self) -> None:
         d = OrderedDict()
-        keys = ['a', 'b', 'c', 'd', 'e', 'f']
-        values = [1, 0.1, 'third element', [1, 2, 3], (1, 2, 3), dict(key='value')]
+        keys = ["a", "b", "c", "d", "e", "f"]
+        values = [1, 0.1, "third element", [1, 2, 3], (1, 2, 3), dict(key="value")]
         for k, v in zip(keys, values):
             d[k] = v
         s = self.parser.getStructure(d)
-        expected = '\nOrderedDict\n{\n\t1-> str : int\n\t2-> str : float\n\t3-> str : str\n\t4-> str : list [int] n=3\n\t5-> str : tuple (int) n=3\n\t6-> str : {\n\t\t1-> str : str\n\t}\n}\n'
+        expected = (
+            "\nOrderedDict\n{\n\t1-> str : int\n\t2-> str : float\n\t3-> str : str\n\t4-> str : list [int] "
+            "n=3\n\t5-> str : tuple (int) n=3\n\t6-> str : {\n\t\t1-> str : str\n\t}\n}\n"
+        )
         self.assertEqual(s, expected)
 
 
