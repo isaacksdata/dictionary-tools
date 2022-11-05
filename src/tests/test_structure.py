@@ -4,7 +4,7 @@ from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
 from src.CommentedDict import CommentedDict
-from src.data_models import CommentedKey
+from src.data_models import CommentedKey, CommentedValue
 from src.structure import DictionaryParser
 
 
@@ -157,6 +157,30 @@ class StructureTestCase(unittest.TestCase):
         expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
                     "n=3\n\tstr : list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 "
                     ": str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n}\n")
+        self.assertEqual(s, expected)
+
+    def test_commenteddict_with_commentedkey_and_commentedValue(self) -> None:
+        self.parser.showKeyComments = True
+        self.parser.showValueComments = True
+        ck = CommentedKey("mykey", "a test commented key")
+        self.commented_dictionary[ck] = 10
+        self.commented_dictionary[(1, 2)] = "a tuple key"
+        tuple_ck = CommentedKey((1, 2, '3'), "a test commented tuple key")
+        self.commented_dictionary[tuple_ck] = "a commented tuple key"
+        cv = CommentedValue(100, "a commented value of 100")
+        self.commented_dictionary["a commented value"] = cv
+        cv_tuple = CommentedValue(('a', 'b'), "a commented value of type tuple")
+        self.commented_dictionary["a commented tuple value"] = cv_tuple
+        cv_dict = CommentedValue(dict(abc=123), "a commented value of type dict")
+        self.commented_dictionary["a commented dict value"] = cv_dict
+
+        s = self.parser.getStructure(self.commented_dictionary)
+        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] n=3\n\tstr : "
+                    "list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 : "
+                    "str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n\tstr : "
+                    "CommentedValue [int] <a commented value of 100>\n\tstr : CommentedValue [tuple (str) n=2] "
+                    "<a commented value of type tuple>\n\tstr : CommentedValue [{\n\t\tstr : int\n\t}] "
+                    "<a commented value of type dict>\n}\n")
         self.assertEqual(s, expected)
 
 

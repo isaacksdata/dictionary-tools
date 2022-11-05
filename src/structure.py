@@ -5,7 +5,7 @@ from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
 
 from src.CommentedDict import CommentedDict
-from src.data_models import CommentedKey
+from src.data_models import CommentedKey, CommentedValue
 
 
 class DictionaryParser:
@@ -15,13 +15,15 @@ class DictionaryParser:
     # todo option to display actual keys
     """
 
-    def __init__(self, showExamples: bool = False, showKeyComments: bool = False):
+    def __init__(self, showExamples: bool = False, showKeyComments: bool = False, showValueComments: bool = False):
         """
         Init the Dictionary parser class
         :param showExamples: Should examples of iterables be included in the summary output
         :type showExamples: bool
         :param showKeyComments: Should the comment of CommentedKeys be printed in the output
         :type showKeyComments: bool
+        :param showValueComments: Should the comment of CommentedValues be printed in the output
+        :type showValueComments: bool
         """
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
@@ -29,6 +31,7 @@ class DictionaryParser:
         self.tabs: str = ""
         self.showExamples = showExamples
         self.showKeyComments = showKeyComments
+        self.showValueComments = showValueComments
         self.is_ordered = False
 
     def incrementTab(self) -> None:
@@ -120,7 +123,7 @@ class DictionaryParser:
         return response
 
     def getStructure_dict(
-        self, dictionary: Mapping, response: str, k: Hashable = None, idx: str = ""
+        self, dictionary: Union[Mapping, CommentedValue], response: str, k: Hashable = None, idx: str = ""
     ) -> str:
         """
         Summarise the structure of a dictionary
@@ -140,30 +143,47 @@ class DictionaryParser:
         :return: the updated response
         :rtype: str
         """
+        is_commented_value = False
         if k is None:
             response = response + f"\n{self.tabs}{{\n"
         else:
-            response = response + f"{self.tabs}{idx}{self.gtnk(k)} : {{\n"
-        self.incrementTab()
-        for i, (key, value) in enumerate(dictionary.items()):
-            idx = f"{i+1}-> " if self.is_ordered else ""
-            if not self.is_iterable(value):
-                response = (
-                    response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
-                )
-            elif isinstance(value, (list, tuple)):
-                r = self.getStructure_list(value)
-                response = response + f"{self.tabs}{idx}{self.gtnk(key)} : {r}\n"
-            elif isinstance(value, dict):
-                response = self.getStructure_dict(value, response, key, idx)
+            if isinstance(dictionary, CommentedValue):
+                response = response + f"{self.tabs}{idx}{self.gtnk(k)} : {type(dictionary).__name__} [{{\n"
+                comment = dictionary.comment
+                dictionary = dictionary.value
+                is_commented_value = True
             else:
-                print(f"Unknown object of type {type(value)}")
-                response = (
-                    response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
-                )
-        self.decrementTab()
-        response = response + f"{self.tabs}}}\n"
-        return response
+                response = response + f"{self.tabs}{idx}{self.gtnk(k)} : {{\n"
+        if isinstance(dictionary, Mapping):
+            self.incrementTab()
+            for i, (key, value) in enumerate(dictionary.items()):
+                idx = f"{i+1}-> " if self.is_ordered else ""
+
+                if (not isinstance(value, CommentedValue) and not self.is_iterable(value)) or \
+                        (isinstance(value, CommentedValue) and not self.is_iterable(value.value)):
+                    response = (
+                        response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
+                    )
+                elif isinstance(value, (list, tuple)) or \
+                        (isinstance(value, CommentedValue) and isinstance(value.value, (list, tuple))):
+                    r = self.getStructure_list(value)
+                    response = response + f"{self.tabs}{idx}{self.gtnk(key)} : {r}\n"
+                elif isinstance(value, dict) or (isinstance(value, CommentedValue) and isinstance(value.value, dict)):
+                    response = self.getStructure_dict(value, response, key, idx)
+                else:
+                    print(f"Unknown object of type {type(value)}")
+                    response = (
+                        response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
+                    )
+            self.decrementTab()
+            if is_commented_value:
+                response = response + f"{self.tabs}}}] <{comment}>\n"
+            else:
+                response = response + f"{self.tabs}}}\n"
+            return response
+        else:
+            raise TypeError(f"Only objects of type Mapping should be passed here. "
+                            f"Not objects of type {type(dictionary)}")
 
     def gtn(self, obj: Any) -> str:
         """
@@ -173,7 +193,13 @@ class DictionaryParser:
         :return: type
         :rtype: str
         """
-        return type(obj).__name__
+        if isinstance(obj, CommentedValue):
+            response = f"{type(obj).__name__} [{self.gtn(obj.value)}]"
+            if self.showValueComments:
+                response = response + f" <{obj.comment}>"
+        else:
+            response = type(obj).__name__
+        return response
 
     def gtnk(self, obj: Any) -> str:
         """
@@ -195,7 +221,7 @@ class DictionaryParser:
             response = type(obj).__name__
         return response
 
-    def getStructure_list(self, my_list: Union[List[Any], Tuple[Any, ...]]) -> str:
+    def getStructure_list(self, my_list: Union[List[Any], Tuple[Any, ...], CommentedValue]) -> str:
         """
         Get the src of a list element. The response will include a list of all the types contained within the
         list 'l' and the length of list 'l'
@@ -204,6 +230,13 @@ class DictionaryParser:
         :return: response
         :rtype: str
         """
+        if isinstance(my_list, CommentedValue):
+            is_commented_value = True
+            name = type(my_list).__name__
+            comment = my_list.comment
+            my_list = my_list.value
+
+        assert isinstance(my_list, (tuple, list)), f"Got {type(my_list)} instead of tuple or list!"
         n = len(my_list)
         types = list(set([self.gtn(x) for x in my_list]))
         types.sort()
@@ -227,6 +260,8 @@ class DictionaryParser:
             if isinstance(example, str):
                 example = f"{example[:10]}..." if len(example) > 10 else example
             response = response + f" e.g. {example}"
+        if is_commented_value:
+            response = f"{name} [" + response + f"] <{comment}>"
         return response
 
     @staticmethod
