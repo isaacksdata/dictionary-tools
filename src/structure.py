@@ -5,6 +5,7 @@ from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
 
 from src.CommentedDict import CommentedDict
+from src.data_models import CommentedKey
 
 
 class DictionaryParser:
@@ -14,17 +15,20 @@ class DictionaryParser:
     # todo option to display actual keys
     """
 
-    def __init__(self, showExamples: bool = False):
+    def __init__(self, showExamples: bool = False, showKeyComments: bool = False):
         """
         Init the Dictionary parser class
         :param showExamples: Should examples of iterables be included in the summary output
         :type showExamples: bool
+        :param showKeyComments: Should the comment of CommentedKeys be printed in the output
+        :type showKeyComments: bool
         """
         self.dictionary: Union[dict, None] = None
         self.response: Union[dict, None] = None
         self.nTabs: int = 0
         self.tabs: str = ""
         self.showExamples = showExamples
+        self.showKeyComments = showKeyComments
         self.is_ordered = False
 
     def incrementTab(self) -> None:
@@ -181,10 +185,15 @@ class DictionaryParser:
         :return: type
         :rtype: str
         """
-        if isinstance(obj, tuple):
-            return self.getStructure_list(obj)
+        if isinstance(obj, CommentedKey):
+            response = f"{type(obj).__name__} [{self.gtnk(obj.key)}]"
+            if self.showKeyComments:
+                response = response + f" <{obj.comment}>"
+        elif isinstance(obj, tuple):
+            response = self.getStructure_list(obj)
         else:
-            return type(obj).__name__
+            response = type(obj).__name__
+        return response
 
     def getStructure_list(self, my_list: Union[List[Any], Tuple[Any, ...]]) -> str:
         """

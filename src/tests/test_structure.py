@@ -4,6 +4,7 @@ from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
 from src.CommentedDict import CommentedDict
+from src.data_models import CommentedKey
 from src.structure import DictionaryParser
 
 
@@ -143,6 +144,19 @@ class StructureTestCase(unittest.TestCase):
         s = self.parser.getStructure(self.commented_dictionary)
         expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
                     "n=3\n\tstr : list [str] n=3\n}\n")
+        self.assertEqual(s, expected)
+
+    def test_commenteddict_with_commentedkey(self) -> None:
+        self.parser.showKeyComments = True
+        ck = CommentedKey("mykey", "a test commented key")
+        self.commented_dictionary[ck] = 10
+        self.commented_dictionary[(1, 2)] = "a tuple key"
+        tuple_ck = CommentedKey((1, 2, '3'), "a test commented tuple key")
+        self.commented_dictionary[tuple_ck] = "a commented tuple key"
+        s = self.parser.getStructure(self.commented_dictionary)
+        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
+                    "n=3\n\tstr : list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 "
+                    ": str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n}\n")
         self.assertEqual(s, expected)
 
 
