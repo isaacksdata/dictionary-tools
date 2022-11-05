@@ -3,8 +3,8 @@ import unittest
 from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
-from src.structure import DictionaryParser
 from src.CommentedDict import CommentedDict
+from src.structure import DictionaryParser
 
 
 class StructureTestCase(unittest.TestCase):
