@@ -3,7 +3,6 @@ from collections import UserDict
 from typing import Any, Hashable, Iterable, List, Optional, Tuple
 
 from src.data_models import CommentedKey, d_keys
-from src.structure import DictionaryParser
 from src.utils import prettyType, simpleType
 
 
@@ -127,16 +126,6 @@ class CommentedDict(UserDict):
         :rtype: void
         """
         self.comment = comment.strip()
-
-    def get_structure(self) -> str:
-        """
-        Get the structure of the dictionary as a summary string
-
-        Utilises the DictionaryParser class
-        :return: string of the dictionary structure
-        :rtype: str
-        """
-        return DictionaryParser().getStructure(self)
 
     def keys_types(self, pretty: bool = False, unique: bool = False) -> List[Hashable]:
         """

@@ -4,6 +4,8 @@ Print the src of a dictionary
 from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
 
+from src.CommentedDict import CommentedDict
+
 
 class DictionaryParser:
     """
@@ -56,7 +58,24 @@ class DictionaryParser:
         response = """"""
         response = self.check_default_dict(dictionary=dictionary, response=response)
         response = self.check_ordered_dict(dictionary=dictionary, response=response)
+        response = self.check_commented_dict(dictionary=dictionary, response=response)
         response = self.getStructure_dict(dictionary, response)
+        return response
+
+    @staticmethod
+    def check_commented_dict(dictionary: Mapping, response: str) -> str:
+        """
+        Check if the dictionary is a commented dict and if so add a statement to print the comment
+
+        :param dictionary: the input dictionary
+        :type dictionary: Mapping
+        :param response: the response string so far
+        :type response: str
+        :return: response
+        :rtype: str
+        """
+        if isinstance(dictionary, CommentedDict):
+            response = response + f"\nComment : {dictionary.comment}"
         return response
 
     def check_ordered_dict(self, dictionary: Mapping, response: str) -> str:
@@ -76,7 +95,8 @@ class DictionaryParser:
             self.is_ordered = True
         return response
 
-    def check_default_dict(self, dictionary: Mapping, response: str) -> str:
+    @staticmethod
+    def check_default_dict(dictionary: Mapping, response: str) -> str:
         """
         Check if the dictionary is a default dict and if so add a statement to describe the default element
 
