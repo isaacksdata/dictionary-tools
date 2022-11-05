@@ -3,6 +3,7 @@ import unittest
 from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
+from src.CommentedDict import CommentedDict
 from src.structure import DictionaryParser
 
 
@@ -36,6 +37,12 @@ class StructureTestCase(unittest.TestCase):
                 "nestedKey2": {"nestedKey3": {"nestedKey4": [1, 0.1, "one"]}},
             },
         }
+
+        self.commented_dictionary = CommentedDict(
+            numbers=[1, 2, 3],
+            letters=["a", "b", "c"],
+            comment="This is a dictionary for numbers and letters",
+        )
 
     def test_getStructure(self) -> None:
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list [int, str] n=3\n}\n"
@@ -130,6 +137,12 @@ class StructureTestCase(unittest.TestCase):
             "\nOrderedDict\n{\n\t1-> str : int\n\t2-> str : float\n\t3-> str : str\n\t4-> str : list [int] "
             "n=3\n\t5-> str : tuple (int) n=3\n\t6-> str : {\n\t\t1-> str : str\n\t}\n}\n"
         )
+        self.assertEqual(s, expected)
+
+    def test_commenteddict(self) -> None:
+        s = self.parser.getStructure(self.commented_dictionary)
+        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
+                    "n=3\n\tstr : list [str] n=3\n}\n")
         self.assertEqual(s, expected)
 
 
