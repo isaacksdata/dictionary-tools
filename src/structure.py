@@ -144,6 +144,7 @@ class DictionaryParser:
         :rtype: str
         """
         is_commented_value = False
+        comment = None
         if k is None:
             response = response + f"\n{self.tabs}{{\n"
         else:
@@ -230,11 +231,15 @@ class DictionaryParser:
         :return: response
         :rtype: str
         """
+        is_commented_value: bool = False
         if isinstance(my_list, CommentedValue):
             is_commented_value = True
             name = type(my_list).__name__
             comment = my_list.comment
             my_list = my_list.value
+        else:
+            name = None
+            comment = None
 
         assert isinstance(my_list, (tuple, list)), f"Got {type(my_list)} instead of tuple or list!"
         n = len(my_list)
