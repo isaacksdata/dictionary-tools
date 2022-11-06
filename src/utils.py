@@ -1,3 +1,5 @@
+from typing import Tuple, Union
+
 def prettyType(obj: object) -> str:
     """
     Return the type of an object as a string
@@ -18,3 +20,11 @@ def simpleType(obj: object) -> type:
     :rtype: type
     """
     return type(obj)
+
+
+def sort_mixed_list(num: Union[int, float, str]) -> Tuple[int, Union[int, float, str], str]:
+    try:
+        ele = int(num)
+        return 0, ele, ''
+    except ValueError:
+        return 1, num, ''

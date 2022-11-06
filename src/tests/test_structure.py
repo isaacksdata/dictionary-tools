@@ -49,6 +49,36 @@ class StructureTestCase(unittest.TestCase):
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list [int, str] n=3\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list))
 
+    def test_getStructure_showVariables(self) -> None:
+        expected = "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : " \
+                   "list <[1, 'abc', 'def']> (int, str) n=3\n}\n"
+        self.parser.showVariables = True
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 2
+        self.parser.nExamples = 2
+        expected = "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : " \
+                   "list <['abc', 'def']> (int, str) n=3\n}\n"
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 1 and first
+        self.parser.nExamples = 1
+        self.parser.whereExamples = 'first'
+        expected = "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : " \
+                   "list <['abc']> (int, str) n=3\n}\n"
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 1 and last
+        self.parser.nExamples = 1
+        self.parser.whereExamples = 'last'
+        expected = "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : " \
+                   "list <[1]> (int, str) n=3\n}\n"
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
     def test_getStructure_example(self) -> None:
         self.parser.showExamples = True
         expected = (
