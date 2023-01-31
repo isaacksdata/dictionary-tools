@@ -11,6 +11,7 @@ from src.utils import sort_mixed_list
 
 random.seed(10)
 
+
 class DictionaryParser:
     """
     This is a class for parsing a dictionary and returning a string of its src which can be printed for a
@@ -21,13 +22,15 @@ class DictionaryParser:
     nExamples parameter. These examples may be random, first or last - controlled by whereExamples parameter.
     """
 
-    def __init__(self,
-                 showExamples: bool = False,
-                 showKeyComments: bool = False,
-                 showValueComments: bool = False,
-                 showVariables: bool = False,
-                 nExamples: int = 3,
-                 whereExamples: str = "random"):
+    def __init__(
+        self,
+        showExamples: bool = False,
+        showKeyComments: bool = False,
+        showValueComments: bool = False,
+        showVariables: bool = False,
+        nExamples: int = 3,
+        whereExamples: str = "random",
+    ):
         """
         Init the Dictionary parser class
         :param showExamples: Should examples of iterables be included in the summary output
@@ -145,7 +148,11 @@ class DictionaryParser:
         return response
 
     def getStructure_dict(
-        self, dictionary: Union[Mapping, CommentedValue], response: str, k: Hashable = None, idx: str = ""
+        self,
+        dictionary: Union[Mapping, CommentedValue],
+        response: str,
+        k: Hashable = None,
+        idx: str = "",
     ) -> str:
         """
         Summarise the structure of a dictionary
@@ -171,7 +178,10 @@ class DictionaryParser:
             response = response + f"\n{self.tabs}{{\n"
         else:
             if isinstance(dictionary, CommentedValue):
-                response = response + f"{self.tabs}{idx}{self.gtnk(k)} : {type(dictionary).__name__} [{{\n"
+                response = (
+                    response
+                    + f"{self.tabs}{idx}{self.gtnk(k)} : {type(dictionary).__name__} [{{\n"
+                )
                 comment = dictionary.comment
                 dictionary = dictionary.value
                 is_commented_value = True
@@ -182,21 +192,32 @@ class DictionaryParser:
             for i, (key, value) in enumerate(dictionary.items()):
                 idx = f"{i+1}-> " if self.is_ordered else ""
 
-                if (not isinstance(value, CommentedValue) and not self.is_iterable(value)) or \
-                        (isinstance(value, CommentedValue) and not self.is_iterable(value.value)):
+                if (
+                    not isinstance(value, CommentedValue)
+                    and not self.is_iterable(value)
+                ) or (
+                    isinstance(value, CommentedValue)
+                    and not self.is_iterable(value.value)
+                ):
                     response = (
-                        response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
+                        response
+                        + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
                     )
-                elif isinstance(value, (list, tuple)) or \
-                        (isinstance(value, CommentedValue) and isinstance(value.value, (list, tuple))):
+                elif isinstance(value, (list, tuple)) or (
+                    isinstance(value, CommentedValue)
+                    and isinstance(value.value, (list, tuple))
+                ):
                     r = self.getStructure_list(value)
                     response = response + f"{self.tabs}{idx}{self.gtnk(key)} : {r}\n"
-                elif isinstance(value, dict) or (isinstance(value, CommentedValue) and isinstance(value.value, dict)):
+                elif isinstance(value, dict) or (
+                    isinstance(value, CommentedValue) and isinstance(value.value, dict)
+                ):
                     response = self.getStructure_dict(value, response, key, idx)
                 else:
                     print(f"Unknown object of type {type(value)}")
                     response = (
-                        response + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
+                        response
+                        + f"{self.tabs}{idx}{self.gtnk(key)} : {self.gtn(value)}\n"
                     )
             self.decrementTab()
             if is_commented_value:
@@ -205,8 +226,10 @@ class DictionaryParser:
                 response = response + f"{self.tabs}}}\n"
             return response
         else:
-            raise TypeError(f"Only objects of type Mapping should be passed here. "
-                            f"Not objects of type {type(dictionary)}")
+            raise TypeError(
+                f"Only objects of type Mapping should be passed here. "
+                f"Not objects of type {type(dictionary)}"
+            )
 
     def gtn(self, obj: Any, blockVariable: bool = False) -> str:
         """
@@ -242,16 +265,18 @@ class DictionaryParser:
                 response = response + f" <{obj.comment}>"
         else:
             if isinstance(obj, (tuple, list)):
-                if self.whereExamples == 'random':
+                if self.whereExamples == "random":
                     items = random.sample(obj, k=self.nExamples)
                     items.sort(key=sort_mixed_list)
-                elif self.whereExamples == 'first':
-                    items = obj[:self.nExamples]
-                elif self.whereExamples == 'last':
-                    items = obj[self.nExamples*-1:]
+                elif self.whereExamples == "first":
+                    items = obj[: self.nExamples]
+                elif self.whereExamples == "last":
+                    items = obj[self.nExamples * -1 :]
                 else:
-                    raise ValueError(f"self.whereExamples must be one of 'random', 'first' or 'last' : "
-                                     f"not {self.whereExamples}")
+                    raise ValueError(
+                        f"self.whereExamples must be one of 'random', 'first' or 'last' : "
+                        f"not {self.whereExamples}"
+                    )
                 response = f"{type(obj).__name__} <{items}>"
             else:
                 response = f"{type(obj).__name__} <{obj}>"
@@ -299,7 +324,9 @@ class DictionaryParser:
             response = f"{type(obj).__name__} <{obj}>"
         return response
 
-    def getStructure_list(self, my_list: Union[List[Any], Tuple[Any, ...], CommentedValue]) -> str:
+    def getStructure_list(
+        self, my_list: Union[List[Any], Tuple[Any, ...], CommentedValue]
+    ) -> str:
         """
         Get the src of a list element. The response will include a list of all the types contained within the
         list 'l' and the length of list 'l'
@@ -318,7 +345,9 @@ class DictionaryParser:
             name = None
             comment = None
 
-        assert isinstance(my_list, (tuple, list)), f"Got {type(my_list)} instead of tuple or list!"
+        assert isinstance(
+            my_list, (tuple, list)
+        ), f"Got {type(my_list)} instead of tuple or list!"
         n = len(my_list)
         types = list(set([self.gtn(x, blockVariable=True) for x in my_list]))
         types.sort()
