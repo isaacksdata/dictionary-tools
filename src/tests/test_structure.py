@@ -49,6 +49,44 @@ class StructureTestCase(unittest.TestCase):
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list [int, str] n=3\n}\n"
         self.assertEqual(expected, self.parser.getStructure(self.dictionary_with_list))
 
+    def test_getStructure_showVariables(self) -> None:
+        expected = (
+            "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : "
+            "list <[1, 'abc', 'def']> (int, str) n=3\n}\n"
+        )
+        self.parser.showVariables = True
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 2
+        self.parser.nExamples = 2
+        expected = (
+            "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : "
+            "list <['abc', 'def']> (int, str) n=3\n}\n"
+        )
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 1 and first
+        self.parser.nExamples = 1
+        self.parser.whereExamples = "first"
+        expected = (
+            "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : "
+            "list <['abc']> (int, str) n=3\n}\n"
+        )
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
+        # test with nExamples set to 1 and last
+        self.parser.nExamples = 1
+        self.parser.whereExamples = "last"
+        expected = (
+            "\n{\n\tint <1> : str <hello world>\n\tint <2> : float <0.1>\n\tint <3> : "
+            "list <[1]> (int, str) n=3\n}\n"
+        )
+        s = self.parser.getStructure(self.dictionary_with_list)
+        self.assertEqual(expected, s)
+
     def test_getStructure_example(self) -> None:
         self.parser.showExamples = True
         expected = (
@@ -142,8 +180,10 @@ class StructureTestCase(unittest.TestCase):
 
     def test_commenteddict(self) -> None:
         s = self.parser.getStructure(self.commented_dictionary)
-        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
-                    "n=3\n\tstr : list [str] n=3\n}\n")
+        expected = (
+            "\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
+            "n=3\n\tstr : list [str] n=3\n}\n"
+        )
         self.assertEqual(s, expected)
 
     def test_commenteddict_with_commentedkey(self) -> None:
@@ -151,12 +191,14 @@ class StructureTestCase(unittest.TestCase):
         ck = CommentedKey("mykey", "a test commented key")
         self.commented_dictionary[ck] = 10
         self.commented_dictionary[(1, 2)] = "a tuple key"
-        tuple_ck = CommentedKey((1, 2, '3'), "a test commented tuple key")
+        tuple_ck = CommentedKey((1, 2, "3"), "a test commented tuple key")
         self.commented_dictionary[tuple_ck] = "a commented tuple key"
         s = self.parser.getStructure(self.commented_dictionary)
-        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
-                    "n=3\n\tstr : list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 "
-                    ": str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n}\n")
+        expected = (
+            "\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] "
+            "n=3\n\tstr : list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 "
+            ": str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n}\n"
+        )
         self.assertEqual(s, expected)
 
     def test_commenteddict_with_commentedkey_and_commentedValue(self) -> None:
@@ -165,22 +207,24 @@ class StructureTestCase(unittest.TestCase):
         ck = CommentedKey("mykey", "a test commented key")
         self.commented_dictionary[ck] = 10
         self.commented_dictionary[(1, 2)] = "a tuple key"
-        tuple_ck = CommentedKey((1, 2, '3'), "a test commented tuple key")
+        tuple_ck = CommentedKey((1, 2, "3"), "a test commented tuple key")
         self.commented_dictionary[tuple_ck] = "a commented tuple key"
         cv = CommentedValue(100, "a commented value of 100")
         self.commented_dictionary["a commented value"] = cv
-        cv_tuple = CommentedValue(('a', 'b'), "a commented value of type tuple")
+        cv_tuple = CommentedValue(("a", "b"), "a commented value of type tuple")
         self.commented_dictionary["a commented tuple value"] = cv_tuple
         cv_dict = CommentedValue(dict(abc=123), "a commented value of type dict")
         self.commented_dictionary["a commented dict value"] = cv_dict
 
         s = self.parser.getStructure(self.commented_dictionary)
-        expected = ("\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] n=3\n\tstr : "
-                    "list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 : "
-                    "str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n\tstr : "
-                    "CommentedValue [int] <a commented value of 100>\n\tstr : CommentedValue [tuple (str) n=2] "
-                    "<a commented value of type tuple>\n\tstr : CommentedValue [{\n\t\tstr : int\n\t}] "
-                    "<a commented value of type dict>\n}\n")
+        expected = (
+            "\nComment : This is a dictionary for numbers and letters\n{\n\tstr : list [int] n=3\n\tstr : "
+            "list [str] n=3\n\tCommentedKey [str] <a test commented key> : int\n\ttuple (int) n=2 : "
+            "str\n\tCommentedKey [tuple (int, str) n=3] <a test commented tuple key> : str\n\tstr : "
+            "CommentedValue [int] <a commented value of 100>\n\tstr : CommentedValue [tuple (str) n=2] "
+            "<a commented value of type tuple>\n\tstr : CommentedValue [{\n\t\tstr : int\n\t}] "
+            "<a commented value of type dict>\n}\n"
+        )
         self.assertEqual(s, expected)
 
 
