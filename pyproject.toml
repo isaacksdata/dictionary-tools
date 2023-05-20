@@ -16,10 +16,13 @@ pydata-sphinx-theme = "^0.10.1"
 
 
 [tool.poetry.group.lint.dependencies]
-isort = "^5.10.1"
-black = "^22.8.0"
 flake8 = "^5.0.4"
 mypy = "^0.982"
+pydantic = "^1.10.2"
+
+[tool.poetry.group.format.dependencies]
+isort = "^5.10.1"
+black = "^22.8.0"
 pydantic = "^1.10.2"
 
 [build-system]
