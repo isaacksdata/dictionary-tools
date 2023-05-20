@@ -1,0 +1,38 @@
+name: Python Formatting
+
+on: [push, pull_request]
+
+jobs:
+  Formatting:
+    runs-on: ubuntu-latest
+    steps:
+      # check-out repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      # install poetry
+      - name: Install poetry
+        run: pipx install poetry==1.2.0
+      # set-up python with cache
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'poetry'
+      # install requirements (including dev dependencies)
+      - name: Install requirements
+        run: poetry install --only format --no-root
+      # run formatters
+      - name: Run formatters
+        run: |
+          set -o pipefail
+          poetry run make format
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v4
+        with:
+          author_name: ${{ github.actor }}
+          author_email: ${{ github.actor }}@users.noreply.github.com
+          message: "Format code with black"
+          add: "."
+          branch: ${{ github.ref }}
