@@ -1,5 +1,5 @@
-from typing import Tuple, Union, Hashable, List, Optional
 from functools import reduce
+from typing import Hashable, List, Optional, Tuple, Union
 
 
 def prettyType(obj: object) -> str:
