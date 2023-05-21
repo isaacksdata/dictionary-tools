@@ -12,6 +12,12 @@ pydantic = "^1.10.2"
 coverage = "^6.5.0"
 line-profiler = "^3.5.1"
 Sphinx = "^5.2.3"
+flake8 = "^5.0.4"
+mypy = "^0.982"
+isort = "^5.10.1"
+black = "^22.8.0"
+codecov = "2.1.13"
+coverage = "6.5.0"
 pydata-sphinx-theme = "^0.10.1"
 
 [tool.poetry.dev-dependencies]
@@ -29,6 +35,11 @@ pydantic = "^1.10.2"
 
 [tool.poetry.group.unit_tests.dependencies]
 pydantic = "^1.10.2"
+
+[tool.poetry.group.code_coverage.dependencies]
+pydantic = "^1.10.2"
+codecov = "2.1.13"
+coverage = "6.5.0"
 
 [build-system]
 requires = ["poetry-core"]
