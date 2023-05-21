@@ -27,7 +27,7 @@ jobs:
       - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.9'
           cache: 'poetry'
       # install requirements (including dev dependencies)
       - name: Install requirements

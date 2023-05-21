@@ -1,6 +1,6 @@
 # based on https://johschmidt42.medium.com/setting-up-python-projects-part-ii-c4bd84b709d1
 
-name: Linting
+name: Unit Tests
 
 on:
   push:
@@ -25,10 +25,10 @@ jobs:
       - name: Install poetry
         run: pipx install poetry==1.2.0
       # set-up python with cache
-      - name: Setup Python 3.8
+      - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.9'
           cache: 'poetry'
       # install requirements (including dev dependencies)
       - name: Install requirements
