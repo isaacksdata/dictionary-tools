@@ -33,7 +33,7 @@ jobs:
       - name: Install requirements
         run: |
           poetry install --only unit_tests
-          python -m install .
+          python -m pip install .
       # run unit tests
       - name: Run Unit Tests
         run: |
