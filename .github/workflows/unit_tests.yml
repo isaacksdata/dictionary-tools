@@ -1,4 +1,6 @@
-name: Python Formatting
+# based on https://johschmidt42.medium.com/setting-up-python-projects-part-ii-c4bd84b709d1
+
+name: Linting
 
 on:
   push:
@@ -10,9 +12,8 @@ on:
       - develop
       - master
 
-
 jobs:
-  Formatting:
+  Unit Tests:
     runs-on: ubuntu-latest
     steps:
       # check-out repo
@@ -31,17 +32,9 @@ jobs:
           cache: 'poetry'
       # install requirements (including dev dependencies)
       - name: Install requirements
-        run: poetry install --only format --no-root
-      # run formatters
-      - name: Run formatters
+        run: poetry install --only unit_tests --no-root
+      # run unit tests
+      - name: Run Unit Tests
         run: |
-          set -o pipefail
-          poetry run make format
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v4
-        with:
-          author_name: ${{ github.actor }}
-          author_email: ${{ github.actor }}@users.noreply.github.com
-          message: "Format code with black"
-          add: "."
-          branch: ${{ github.ref }}
+          cd tests
+          python -m unittest

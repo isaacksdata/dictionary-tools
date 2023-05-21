@@ -1,21 +1,21 @@
 """
-Print the src of a dictionary
+Print the dict_structure of a dictionary
 """
 import random
 from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
 
-from src.CommentedDict import CommentedDict
-from src.data_models import CommentedKey, CommentedValue
-from src.utils import sort_mixed_list
+from dict_structure.CommentedDict import CommentedDict
+from dict_structure.data_models import CommentedKey, CommentedValue
+from dict_structure.utils import sort_mixed_list
 
 random.seed(10)
 
 
 class DictionaryParser:
     """
-    This is a class for parsing a dictionary and returning a string of its src which can be printed for a
-    convenient way of understanding any nested src and the types used
+    This is a class for parsing a dictionary and returning a string of its dict_structure which can be printed for a
+    convenient way of understanding any nested dict_structure and the types used
 
     If showVariables is True, then the keys and values will be printed. If the key or a value is an iterable
     (except a string) then a number of examples will be printed. The number of examples displayed is controlled by
@@ -328,7 +328,7 @@ class DictionaryParser:
         self, my_list: Union[List[Any], Tuple[Any, ...], CommentedValue]
     ) -> str:
         """
-        Get the src of a list element. The response will include a list of all the types contained within the
+        Get the dict_structure of a list element. The response will include a list of all the types contained within the
         list 'l' and the length of list 'l'
         :param my_list: the list to be investigated
         :type my_list: list of any type

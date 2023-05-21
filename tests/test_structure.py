@@ -3,9 +3,9 @@ import unittest
 from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
-from src.CommentedDict import CommentedDict
-from src.data_models import CommentedKey, CommentedValue
-from src.structure import DictionaryParser
+from dict_structure.CommentedDict import CommentedDict
+from dict_structure.data_models import CommentedKey, CommentedValue
+from dict_structure.structure import DictionaryParser
 
 
 class StructureTestCase(unittest.TestCase):
@@ -133,7 +133,7 @@ class StructureTestCase(unittest.TestCase):
         self.assertEqual(expected, self.parser.getStructure(self.nested_dictionary_3))
 
     def test_hardDict(self) -> None:
-        with open("./combined-newsqa-data-v1.json", "r") as f:
+        with open("combined-newsqa-data-v1.json", "r") as f:
             d = json.load(f)
         expected = (
             "\n{\n\tstr : str\n\tstr : list [\n\t{\n\t\tstr : str\n\t\tstr : str\n\t\tstr : "

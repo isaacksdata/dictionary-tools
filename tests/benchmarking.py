@@ -2,8 +2,8 @@ from typing import Union
 
 from line_profiler import LineProfiler
 
-from src.CommentedDict import CommentedDict
-from src.data_models import CommentedKey
+from dict_structure.CommentedDict import CommentedDict
+from dict_structure.data_models import CommentedKey
 
 basic_dict: dict[Union[int, str, CommentedKey], Union[int, str]] = {"mykey": 10}
 commentedDict: CommentedDict = CommentedDict()
