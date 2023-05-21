@@ -265,7 +265,9 @@ class DictionaryParser:
                 response = response + f" <{obj.comment}>"
         else:
             if isinstance(obj, (tuple, list)):
-                items: Union[Tuple[Any, ...], List[Any]] = () if isinstance(obj, tuple) else []  # for mypy
+                items: Union[Tuple[Any, ...], List[Any]] = (
+                    () if isinstance(obj, tuple) else []
+                )  # for mypy
                 if self.whereExamples == "random":
                     items = random.sample(obj, k=self.nExamples)
                     items.sort(key=sort_mixed_list)
