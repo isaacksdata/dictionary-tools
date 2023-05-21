@@ -1,7 +1,7 @@
 import unittest
 
-from dict_structure.CommentedDict import CommentedDict
-from dict_structure.data_models import CommentedKey
+from dict_tools.CommentedDict import CommentedDict
+from dict_tools.data_models import CommentedKey
 
 
 class CommentedDictTestCase(unittest.TestCase):

@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Isaac Kitchen-Smith <ikitchensmith@wrentherapeutics.com>"]
 readme = "README.md"
-packages = [{include = "dict_structure"}]
+packages = [{include = "dict_tools"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -15,7 +15,7 @@ Sphinx = "^5.2.3"
 pydata-sphinx-theme = "^0.10.1"
 
 [tool.poetry.dev-dependencies]
-dict_structure = {path = "./dict_structure"}
+dict_tools = {path = "./dict_tools"}
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^5.0.4"

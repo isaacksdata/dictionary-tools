@@ -1,6 +1,6 @@
 import unittest
 
-from dict_structure.utils import *
+from dict_tools.utils import *
 
 
 class UtilsTestCse(unittest.TestCase):

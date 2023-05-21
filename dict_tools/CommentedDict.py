@@ -2,8 +2,8 @@ import logging
 from collections import UserDict
 from typing import Any, Hashable, Iterable, List, Optional, Tuple
 
-from dict_structure.data_models import CommentedKey, d_keys
-from dict_structure.utils import prettyType, simpleType
+from dict_tools.data_models import CommentedKey, d_keys
+from dict_tools.utils import prettyType, simpleType
 
 
 class CommentedDict(UserDict):

@@ -3,9 +3,9 @@ import unittest
 from collections import OrderedDict, defaultdict
 from string import ascii_lowercase
 
-from dict_structure.CommentedDict import CommentedDict
-from dict_structure.data_models import CommentedKey, CommentedValue
-from dict_structure.structure import DictionaryParser
+from dict_tools.CommentedDict import CommentedDict
+from dict_tools.data_models import CommentedKey, CommentedValue
+from dict_tools.structure import DictionaryParser
 
 
 class StructureTestCase(unittest.TestCase):
