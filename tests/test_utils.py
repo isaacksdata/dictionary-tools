@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils import *
+from dict_structure.utils import *
 
 
 class UtilsTestCse(unittest.TestCase):
@@ -14,8 +14,8 @@ class UtilsTestCse(unittest.TestCase):
     def test_extract_nested_dict(self) -> None:
         path = "a/b"
         self.assertEqual(extract_nested_dict(self.dictionary, path=path), "c")
-        keys_1 = [1, 2]
-        self.assertEqual(extract_nested_dict(self.dictionary, keys=keys_1), 3)
+        keys_1 = [1, 2, 3, "key"]
+        self.assertEqual(extract_nested_dict(self.dictionary, keys=keys_1), 4)
         keys_2 = [(1, 2), 0.51]
         self.assertEqual(extract_nested_dict(self.dictionary, keys=keys_2), "value")
 
