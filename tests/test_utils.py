@@ -1,6 +1,6 @@
 import unittest
 
-from dict_tools.utils import *
+from dict_tools.utils import extract_nested_dict, order_keys
 
 
 class UtilsTestCse(unittest.TestCase):

@@ -31,7 +31,9 @@ jobs:
           python-version: '3.9'
       # install requirements (including dev dependencies)
       - name: Install requirements
-        run: poetry install --only unit_tests
+        run: |
+          poetry install --only unit_tests
+          python -m install .
       # run unit tests
       - name: Run Unit Tests
         run: |

@@ -13,13 +13,13 @@ lint-isort:
 	@isort . --check
 
 lint-flake8:
-	@flake8 .
+	@flake8 ./
 
 lint-mypy:
-	@mypy ./src
+	@mypy ./dict_tools
 
 lint-mypy-report:
-	@mypy ./src --html-report ./mypy_html
+	@mypy ./dict_tools --html-report ./mypy_html
 
 format: format-black format-isort
 lint: lint-flake8 lint-mypy
