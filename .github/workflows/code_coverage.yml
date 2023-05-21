@@ -24,7 +24,9 @@ jobs:
           python-version: '3.9'
       # install requirements (including dev dependencies)
       - name: Install requirements
-        run: poetry install --only code_coverage
+        run: |
+          poetry install --only code_coverage
+          python -m pip install coverage==6.5.0
 
       - name: Run tests and coverage
         run: |

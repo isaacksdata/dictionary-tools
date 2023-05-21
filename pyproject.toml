@@ -35,7 +35,6 @@ pydantic = "^1.10.2"
 [tool.poetry.group.code_coverage.dependencies]
 pydantic = "^1.10.2"
 codecov = "^2.1.13"
-coverage = "^6.5.0"
 
 [build-system]
 requires = ["poetry-core", "coverage"]
