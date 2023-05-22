@@ -1,6 +1,7 @@
 import json
 import unittest
 from collections import OrderedDict, defaultdict
+import os
 from string import ascii_lowercase
 
 from dict_tools.CommentedDict import CommentedDict
@@ -44,6 +45,11 @@ class StructureTestCase(unittest.TestCase):
             letters=["a", "b", "c"],
             comment="This is a dictionary for numbers and letters",
         )
+
+        if os.getcwd().endswith("tests"):
+            self.hard_test_path = "combined-newsqa-data-v1.json"
+        else:
+            self.hard_test_path = "tests/combined-newsqa-data-v1.json"
 
     def test_getStructure(self) -> None:
         expected = "\n{\n\tint : str\n\tint : float\n\tint : list [int, str] n=3\n}\n"
@@ -133,7 +139,7 @@ class StructureTestCase(unittest.TestCase):
         self.assertEqual(expected, self.parser.getStructure(self.nested_dictionary_3))
 
     def test_hardDict(self) -> None:
-        with open("tests/combined-newsqa-data-v1.json", "r") as f:
+        with open(self.hard_test_path, "r") as f:
             d = json.load(f)
         expected = (
             "\n{\n\tstr : str\n\tstr : list [\n\t{\n\t\tstr : str\n\t\tstr : str\n\t\tstr : "

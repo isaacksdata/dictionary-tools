@@ -39,3 +39,11 @@ jobs:
         run: |
           cd tests
           python -m unittest
+      - name: Update badge
+        if: always()
+        run: |
+          if [[ ${{ job.status }} == 'success' ]]; then
+            sed -i -E 's/!\[unit tests\]\([^)]*\)/![unit tests](https:\/\/github.com\/isaacksdata\/dictionary-tools\/actions\/workflows\/unit_tests.yml\/badge.svg)/' README.md
+          else
+            sed -i -E 's/!\[unit tests\]\([^)]*\)/![unit tests](https:\/\/github.com\/isaacksdata\/dictionary-tools\/actions\/workflows\/unit_tests.yml\/badge.svg?event=push)/' README.md
+          fi
