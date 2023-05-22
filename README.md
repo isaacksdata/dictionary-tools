@@ -1,3 +1,6 @@
+[![codecov](https://codecov.io/gh/isaacksdata/dictionary-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/isaacksdata/dictionary-tools)
+
+
 # Dictionary Tools  
 
 Documentation -> https://isaacksdata.github.io/dictionary-tools/
