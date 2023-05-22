@@ -1,7 +1,7 @@
 import json
+import os
 import unittest
 from collections import OrderedDict, defaultdict
-import os
 from string import ascii_lowercase
 
 from dict_tools.CommentedDict import CommentedDict
