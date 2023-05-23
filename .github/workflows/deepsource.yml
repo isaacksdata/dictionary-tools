@@ -25,7 +25,7 @@ jobs:
           sudo mv cli /usr/local/bin/deepsource
 
       - name: Run DeepSource analysis
-        run: deepsource analyze --on-repo=github
+        run: deepsource report
         env:
           DEEPSOURCE_TOKEN: ${{ secrets.DEEPSOURCE_SECRET }}
 
