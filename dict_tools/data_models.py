@@ -1,6 +1,4 @@
-"""
-Other commented data models used for keys and values
-"""
+"""Other commented data models used for keys and values"""
 
 from typing import Any, Generator, Hashable, Mapping, Union
 
@@ -42,9 +40,7 @@ class CommentedValue:
 
 
 class d_keys:
-    """
-    A class used for extracting dictionary keys from CommentedDict
-    """
+    """A class used for extracting dictionary keys from CommentedDict"""
 
     def __init__(self, d: Mapping, removeComments: bool = True):
         """

@@ -112,12 +112,11 @@ class CommentedDict(UserDict):
         match = [k for k in self.__getCommentedKeys() if k.key == key]
         if len(match) == 0:
             return None
-        elif len(match) == 1:
+        if len(match) == 1:
             return match[0]
-        else:
-            raise ValueError(
-                "Cannot have two CommentedKeys with the same key in the same dictionary!"
-            )
+        raise ValueError(
+            "Cannot have two CommentedKeys with the same key in the same dictionary!"
+        )
 
     def set_comment(self, comment: str) -> None:
         """
@@ -144,8 +143,7 @@ class CommentedDict(UserDict):
         types = [fun(x) for x in d_keys(self, removeComments=False)]
         if unique:
             return list(set(types))
-        else:
-            return types
+        return types
 
     def keys(self) -> d_keys:  # type: ignore[override]
         """

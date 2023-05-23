@@ -20,8 +20,8 @@ class UtilsTestCse(unittest.TestCase):
         self.assertEqual(extract_nested_dict(self.dictionary, keys=keys_2), "value")
 
     def test_order_keys(self) -> None:
-        input = [2, 3, 1, "key"]
+        test_data = [2, 3, 1, "key"]
         expected_output = [1, 2, 3, "key"]
-        self.assertListEqual(order_keys(self.dictionary, input), expected_output)
+        self.assertListEqual(order_keys(self.dictionary, test_data), expected_output)
 
         self.assertRaises(KeyError, order_keys, self.dictionary, [3, 1, "key"])

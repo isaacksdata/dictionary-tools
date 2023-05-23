@@ -1,6 +1,4 @@
-"""
-Print the dict_tools of a dictionary
-"""
+"""Print the dict_tools of a dictionary"""
 import random
 from collections import OrderedDict, defaultdict
 from typing import Any, Hashable, List, Mapping, Tuple, Union
@@ -60,7 +58,7 @@ class DictionaryParser:
         self.is_ordered = False
 
     def incrementTab(self) -> None:
-        """
+        r"""
         Increase the number of tabs by 1.
         E.g. '\t' -> '\t\t'
         :return: void
@@ -70,7 +68,7 @@ class DictionaryParser:
         self.tabs = "".join(["\t"] * self.nTabs)
 
     def decrementTab(self) -> None:
-        """
+        r"""
         Decrease the number of tabs by 1
         E.g. '\t\t' -> '\t'
         :return: void
@@ -225,11 +223,9 @@ class DictionaryParser:
             else:
                 response = response + f"{self.tabs}}}\n"
             return response
-        else:
-            raise TypeError(
-                f"Only objects of type Mapping should be passed here. "
-                f"Not objects of type {type(dictionary)}"
-            )
+        raise TypeError(
+            f"Only objects of type Mapping should be passed here. Not objects of type {type(dictionary)}"
+        )
 
     def gtn(self, obj: Any, blockVariable: bool = False) -> str:
         """
@@ -352,10 +348,10 @@ class DictionaryParser:
             my_list, (tuple, list)
         ), f"Got {type(my_list)} instead of tuple or list!"
         n = len(my_list)
-        types = list(set([self.gtn(x, blockVariable=True) for x in my_list]))
+        types = list({self.gtn(x, blockVariable=True) for x in my_list})
         types.sort()
         l_type = self.gtn(my_list)
-        if all([x == "dict" for x in types]):
+        if all(x == "dict" for x in types):
             r = self.getStructure_dict(my_list[0], "")
         else:
             r = None
