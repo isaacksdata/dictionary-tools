@@ -18,8 +18,8 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install dependencies
-        run: pip install deepsource
+      - name: Install DeepSource CLI
+        run: curl https://deepsource.io/cli | sh
 
       - name: Run DeepSource analysis
         run: deepsource analyze --on-repo=github
