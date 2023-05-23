@@ -1,6 +1,8 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/isaacksdata/dictionary-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/isaacksdata/dictionary-tools)
 ![unit tests](https://github.com/isaacksdata/dictionary-tools/actions/workflows/unit_tests.yml/badge.svg)
+[![DeepSource](https://app.deepsource.com/gh/isaacksdata/dictionary-tools.svg/?label=active+issues&show_trend=true&token=VPCHdTjz3W_pzGOGCfPp9Xvs)](https://app.deepsource.com/gh/isaacksdata/dictionary-tools/?ref=repository-badge)
+[![DeepSource](https://app.deepsource.com/gh/isaacksdata/dictionary-tools.svg/?label=resolved+issues&show_trend=true&token=VPCHdTjz3W_pzGOGCfPp9Xvs)](https://app.deepsource.com/gh/isaacksdata/dictionary-tools/?ref=repository-badge)
 
 # Dictionary Tools  
 

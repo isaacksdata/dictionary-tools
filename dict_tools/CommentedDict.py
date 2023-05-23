@@ -80,7 +80,8 @@ class CommentedDict(UserDict):
             v = self.data.get(key.key, None)
             if v is not None:
                 logging.warning(
-                    f"Popping {key.key} and replacing with CommentedKey with key {key}"
+                    "Popping %s and replacing with CommentedKey with key %s",
+                    key.key, key
                 )
                 _ = self.data.pop(key.key)
             else:
@@ -92,7 +93,8 @@ class CommentedDict(UserDict):
             ck = self.__checkCommentedKeys(key)
             if ck is not None:
                 logging.warning(
-                    f"CommentedKey with key = {key} will be replaced with {key}"
+                    "CommentedKey with key = %s will be replaced with %s",
+                    key, key
                 )
                 _ = self.data.pop(ck)
         else:
