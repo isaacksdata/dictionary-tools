@@ -19,7 +19,10 @@ jobs:
           python-version: 3.9
 
       - name: Install DeepSource CLI
-        run: curl https://deepsource.io/cli | sh
+        run: |
+          curl -LO "https://deepsource.io/cli"
+          chmod +x cli
+          sudo mv cli /usr/local/bin/deepsource
 
       - name: Run DeepSource analysis
         run: deepsource analyze --on-repo=github
