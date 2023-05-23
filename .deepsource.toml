@@ -5,3 +5,14 @@ name = "python"
 
   [analyzers.meta]
   runtime_version = "3.x.x"
+
+[mypy]
+
+  [mypy.diagnostic-missing-ignores]
+    enable = true
+
+  [mypy.diagnostic-missing-ignores.ignore]
+    - "D100"  # Missing docstring in public module
+    - "D101"  # Missing docstring in public class
+    - "D102"  # Missing docstring in public method
+    - "D103"  # Missing docstring in public function
