@@ -2,7 +2,7 @@
 name = "dict_tools"
 version = "0.1.0"
 description = ""
-authors = ["Isaac Kitchen-Smith <ikitchensmith@wrentherapeutics.com>"]
+authors = ["Isaac Kitchen-Smith <isaacks123@gmail.com>"]
 readme = "README.md"
 packages = [{include = "dict_tools"}]
 
